@@ -1,0 +1,9 @@
+#drawing{
+	position:relative;
+	width:300px;
+	heigth:300px;
+}
+#drawing > div{
+	position:absolute;
+	border:1px solid black;
+}
