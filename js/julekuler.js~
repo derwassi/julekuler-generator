@@ -18,18 +18,34 @@ ASPECT,
 NEAR,
 FAR);
   
+
+
 var scene = new THREE.Scene();
   
 //add the camera to the scene
 scene.add(camera);
-  
+// CONTROLS
+	
 //the camera starts at 0,0,0
 //so pull it back
 camera.position.z = 300;
   
 //start the renderer
 renderer.setSize(WIDTH, HEIGHT);
-  
+
+controls = new THREE.OrbitControls( camera, renderer.domElement );
+function animate() {
+ 
+    // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
+    requestAnimationFrame(animate);
+ 
+    // Render the scene.
+    renderer.render(scene, camera);
+    controls.update();
+ 
+  }
+requestAnimationFrame(animate);
+
 //attach the render-supplied DOM element
 $container.append(renderer.domElement);
 
@@ -156,8 +172,10 @@ var createColorPicker=function(colors){
 createColorPicker(colors);
 var canvas = $('#texture')[0]
 var context = canvas.getContext("2d");
+var canvasStretched = $('#texture-stretched')[0]
+var contextStretched = canvasStretched.getContext("2d");
 
-var texture1 = new THREE.Texture(canvas);
+var texture1 = new THREE.Texture(canvasStretched);
 var material1 = new THREE.MeshBasicMaterial( {map: texture1, color:'#aaa'} );
 var mesh1 = new THREE.Mesh(
 	 new THREE.SphereGeometry(
@@ -176,7 +194,7 @@ scene.needsUpdate = true;
 // add to the scene
 scene.add(pointLight);
 
-// draw!
+// draw!h
 renderer.render(scene, camera);
 
 var redraw=function(){
@@ -193,6 +211,23 @@ var redraw=function(){
 		//context.fillStyle = '#000';
 		//context.fillRect(col,row,10,10);
 	});
+	contextStretched.drawImage(canvas,0,0);
+	for(var i=0;i<7;i++){
+		for(var j=0;j<4;j++){
+			var fromx=j*80+(16/2-(i+1))*5;
+			var fromy=i*10;
+			var fromwidth=(i+1)*2*5;
+			var fromheight=10;
+			var tox=j*80;
+			var toy=i*10;
+			var towidth=80;
+			var toheight=10;
+			console.log(fromx,fromy,fromwidth,fromheight,tox,toy,towidth,toheight);
+			contextStretched.drawImage(canvas,fromx ,fromy ,fromwidth ,fromheight ,tox ,toy , towidth, toheight);
+			contextStretched.drawImage(canvas,fromx ,205-fromy-10 ,fromwidth ,fromheight ,tox ,205-toy , towidth, toheight);
+		}
+			
+	}
 	texture1.needsUpdate = true;
 	scene.needsUpdate=true;
 	renderer.render(scene,camera);
