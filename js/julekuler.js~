@@ -1,3 +1,6 @@
+(function(){
+
+window.julekuler = {};
 var WIDTH = 400,
 HEIGHT = 300;
 // set some camera attributes
@@ -5,109 +8,102 @@ var VIEW_ANGLE = 45,
 ASPECT = WIDTH / HEIGHT,
 NEAR = 0.1,
 FAR = 10000;
-// get the DOM element to attach to
-// - assume we've got jQuery to hand
-var $container = $('#container');
-// create a WebGL renderer, camera
-// and a scene
-var renderer = new THREE.WebGLRenderer();
-var camera =
-new THREE.PerspectiveCamera(
-VIEW_ANGLE,
-ASPECT,
-NEAR,
-FAR);
-  
-
-
-var scene = new THREE.Scene();
-  
-//add the camera to the scene
-scene.add(camera);
-// CONTROLS
-	
-//the camera starts at 0,0,0
-//so pull it back
-camera.position.z = 300;
-  
-//start the renderer
-renderer.setSize(WIDTH, HEIGHT);
-
-controls = new THREE.OrbitControls( camera, renderer.domElement );
-function animate() {
- 
-    // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
-    requestAnimationFrame(animate);
- 
-    // Render the scene.
-    renderer.render(scene, camera);
-    controls.update();
- 
-  }
-requestAnimationFrame(animate);
-
-//attach the render-supplied DOM element
-$container.append(renderer.domElement);
 
 // set up the sphere vars
 var radius = 50,
     segments = 16,
     rings = 16;
+var colors = {
+	0:'white',
+	1:'red',
+	2:'green',
+	3:'blue'
+};
 
-// create a new mesh with
-// sphere geometry - we will cover
-// the sphereMaterial next!
-var sphere = new THREE.Mesh(
-
-  new THREE.SphereGeometry(
-    radius/2,
-    segments/2,
-    rings/2),
-
-  sphereMaterial);
-sphere.position.x=50;
-sphere.position.y=50;
-// add the sphere to the scene
-scene.add(sphere);
-
-// create the sphere's material
-var sphereMaterial =
-  new THREE.MeshLambertMaterial(
-    {
-      color: 0xCC0000
-    });
-
-// create a point light
-var pointLight =
-  new THREE.PointLight(0xFFFFFF);
-
-// set its position
-pointLight.position.x = 10;
-pointLight.position.y = 50;
-pointLight.position.z = 130;
+var renderer;
+var scene;
+var camera;
+var canvas;
+var context;
+var canvasStretched;
+var contextStretched;
+var julekulerTexture;
+var initThreeJs = function(container){
+	// get the DOM element to attach to
+	// - assume we've got jQuery to hand
+	// create a WebGL renderer, camera
+	// and a scene
+	renderer = new THREE.WebGLRenderer();
+	camera = new THREE.PerspectiveCamera(
+		VIEW_ANGLE,
+		ASPECT,
+		NEAR,
+		FAR);
+	renderer.setClearColorHex(0x333F47, 1); 
 
 
-// sphere geometry
-sphere.geometry;
+	scene = new THREE.Scene();
+  
+	//add the camera to the scene
+	scene.add(camera);
+	// CONTROLS
+	
+	//the camera starts at 0,0,0
+	//so pull it back
+	camera.position.z = 300;
+  
+	//start the renderer
+	renderer.setSize(WIDTH, HEIGHT);
 
-// which contains the vertices and faces
-sphere.geometry.vertices; // an array
-sphere.geometry.faces; // also an array
+	controls = new THREE.OrbitControls( camera, renderer.domElement );
 
-// its position
-sphere.position; // contains x, y and z
-sphere.rotation; // same
-sphere.scale; // ... same
 
-// set the geometry to dynamic
-// so that it allow updates
-sphere.geometry.dynamic = true;
+	//attach the render-supplied DOM element
+	container.append(renderer.domElement);
 
-// changes to the vertices
-sphere.geometry.verticesNeedUpdate = true;
 
-// changes to the normals
-sphere.geometry.normalsNeedUpdate = true;
+	// create a point light
+	/*var pointLight =
+	  new THREE.PointLight(0xFFFFFF);
+
+	// set its position
+	pointLight.position.x = 10;
+	pointLight.position.y = 50;
+	pointLight.position.z = -130;
+	scene.add(pointLight);*/
+	var ambientLight = new THREE.AmbientLight(0x888888);
+	scene.add(ambientLight);
+	/*var directionalLight = new THREE.DirectionalLight(0xffffff);
+	directionalLight.position.set(1, 1, 1).normalize();
+	scene.add(directionalLight);*/
+	renderer.render(scene, camera);
+};
+
+var addJulekuler = function(config){
+	canvas = $('#texture')[0]
+	context = canvas.getContext("2d");
+	canvasStretched = $('#texture-stretched')[0]
+	contextStretched = canvasStretched.getContext("2d");
+
+	julekulerTexture = new THREE.Texture(canvasStretched);
+	var material1 = new THREE.MeshLambertMaterial( {map: julekulerTexture} );
+	var mesh1 = new THREE.Mesh(
+		 new THREE.SphereGeometry(
+	    radius,
+	    segments,
+	    rings),
+	material1
+	);
+	// changes to the vertices
+	mesh1.geometry.verticesNeedUpdate = true;
+
+	// changes to the normals
+	mesh1.geometry.normalsNeedUpdate = true;
+	scene.add(mesh1);
+	scene.needsUpdate = true;
+	// add to the scene
+	
+};
 
 var traverseDrawingSurface = function(centerWidth, centerHeight, drawFunc){
 	var drawTriangle = function(baseline, lineHeight,drawFunc){
@@ -147,57 +143,23 @@ var traverseDrawingSurface = function(centerWidth, centerHeight, drawFunc){
 	});
 	
 };
-var num=0;
-var a = 10;
-traverseDrawingSurface(16,13,function(row,col){
-$("#drawing").append($('<div></div>').css('width',a+'px').css('height',a+'px').css('left',col*a + 'px').css('top',row*a + 'px').attr('id','pixel-'+row+'-'+col));
-console.log(num++ + ": " + row+" " + col);
-});
 
-var colors = {
-0:'white',
-1:'red',
-2:'green',
-3:'blue'
+var createJulekulerCanvas = function(config){
+	var a = config.sideLength;//TODO: config
+
+	traverseDrawingSurface(config.centerWidth,config.centerHeight,function(row,col){
+		$("#drawing")
+			.append($('<div></div>')
+			.css('width',a+'px')
+			.css('height',a+'px')
+			.css('left',col*a + 'px')
+			.css('top',row*a + 'px')
+			.attr('id','pixel-'+row+'-'+col));
+
+	});
 };
 
-var createColorPicker=function(colors){
-	for(var color in colors){
-		$('#colors').append($('<div></div>').attr('data-color',color).css('background-color',colors[color]));	
-	}
-};
-
-
-
-createColorPicker(colors);
-var canvas = $('#texture')[0]
-var context = canvas.getContext("2d");
-var canvasStretched = $('#texture-stretched')[0]
-var contextStretched = canvasStretched.getContext("2d");
-
-var texture1 = new THREE.Texture(canvasStretched);
-var material1 = new THREE.MeshBasicMaterial( {map: texture1, color:'#aaa'} );
-var mesh1 = new THREE.Mesh(
-	 new THREE.SphereGeometry(
-    radius,
-    segments,
-    rings),
-	material1
-);
-// changes to the vertices
-mesh1.geometry.verticesNeedUpdate = true;
-
-// changes to the normals
-mesh1.geometry.normalsNeedUpdate = true;
-scene.add(mesh1);
-scene.needsUpdate = true;
-// add to the scene
-scene.add(pointLight);
-
-// draw!h
-renderer.render(scene, camera);
-
-var redraw=function(){
+var redraw = function(config){
 	context.fillStyle='#aaa';
 	context.fillRect(0,0,640,400);
 	traverseDrawingSurface(16,13,function(row,col){
@@ -228,26 +190,105 @@ var redraw=function(){
 		}
 			
 	}
-	texture1.needsUpdate = true;
+	julekulerTexture.needsUpdate = true;
 	scene.needsUpdate=true;
-	renderer.render(scene,camera);
+	
 	
 };
 
-var curCol=0;
-$('#colors>div').click(function(el){
-	curCol = parseInt($(el.target).attr('data-color'));
-});
+var addEvents = function(){
+	var curCol=0;
+	$('#colors>div').click(function(el){
+		curCol = parseInt($(el.target).attr('data-color'));
+	});
 
-$("#drawing >div").click(function(el){
-	$el = $(el.target);
-	var c = parseInt($el.attr('data-color'));
-	if(c == curCol){
-		$el.attr('data-color',0);
-	}else{
-		$el.attr('data-color',curCol);
+	$("#drawing >div").click(function(el){
+		$el = $(el.target);
+		var c = parseInt($el.attr('data-color'));
+		if(c == curCol){
+			$el.attr('data-color',0);
+		}else{
+			$el.attr('data-color',curCol);
+		}
+		var c = parseInt($el.attr('data-color'));
+		$el.css('background-color',colors[c]);
+		redraw();
+	});
+	$("#load").click(function(){
+		var obj = JSON.parse($('#load-save').val());
+		colors = obj.colors;
+		
+		traverseDrawingSurface(16,13,function(row,col){
+				var $el = $('#pixel-'+row+'-'+col);
+				$el.attr('data-color',obj.pattern[row][col]);
+				$el.css('background-color',colors[obj.pattern[row][col]]);
+			
+			
+		});
+
+	});
+	$("#save").click(function(){
+		var s = {};
+		traverseDrawingSurface(16,13,function(row,col){
+			var val = parseInt($('#pixel-'+row+'-'+col).attr('data-color'));
+			if(!val) val=0;
+			if(!s[row]) s[row] = {};
+			
+			s[row][col]=val;
+		});
+		$('#load-save').val(JSON.stringify({colors:colors,pattern:s}));	
+	});
+}
+
+
+
+var createColorPicker=function(colors){
+	for(var color in colors){
+		$('#colors').append($('<div></div>').attr('data-color',color).css('background-color',colors[color]));	
 	}
-	var c = parseInt($el.attr('data-color'));
-	$el.css('background-color',colors[c]);
-	redraw();
-});
+};
+
+
+/**
+* For controls
+*/
+var animateThreeJs = function(){
+
+    // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
+    requestAnimationFrame(animateThreeJs);
+     
+    // Render the scene.
+    renderer.render(scene, camera);
+    controls.update();
+}
+
+window.julekuler = {};
+window.julekuler.start = function(config){
+//TODO config
+	
+	initThreeJs($('#container'));
+	addJulekuler(config.julekuler);
+	animateThreeJs();	
+	requestAnimationFrame(animateThreeJs);
+	createJulekulerCanvas(config.julekulerCanvas);
+	createColorPicker(colors);
+	
+	addEvents();
+};
+
+
+window.julekuler.start({julekulerCanvas:{centerWidth:16,centerHeight:13,sideLength:10}});
+
+
+
+
+
+
+
+
+// draw!h
+
+
+
+
+})();

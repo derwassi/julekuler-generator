@@ -24,7 +24,7 @@
         <![endif]-->
 
         <!-- Add your site or application content here -->
-        <p>Hello world! This is HTML5 Boilerplate.</p>
+       	<h1>Julekuler Generator</h1>
 	<div id="colors"></div>
 	<div id="drawing"></div>
 	<canvas id="texture" width="320" height="205"></canvas>
@@ -33,6 +33,7 @@
 
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
 	<script src="js/vendor/three.min.js"></script>
+	<script src="js/OrbitControls.js"></script>
         <script src="js/plugins.js"></script>
         <script src="js/main.js"></script>
 	<script src="js/julekuler.js"></script>

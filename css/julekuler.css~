@@ -18,7 +18,11 @@
 	height:10px;
 	border:1px solid black;
 }
-#texture{
-	width:640px;
-	height:400px;
+#texture,#texture-stretched{
+	display:none;
+}
+
+#container, #drawing{
+	float:left;
+	margin:10px;
 }
