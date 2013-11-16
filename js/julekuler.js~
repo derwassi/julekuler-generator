@@ -11,8 +11,8 @@ FAR = 10000;
 
 // set up the sphere vars
 var radius = 50,
-    segments = 16,
-    rings = 16;
+    segments = 64,
+    rings = 41;
 var colors = {
 	0:'white',
 	1:'red',
@@ -71,7 +71,7 @@ var initThreeJs = function(container){
 	pointLight.position.y = 50;
 	pointLight.position.z = -130;
 	scene.add(pointLight);*/
-	var ambientLight = new THREE.AmbientLight(0x888888);
+	var ambientLight = new THREE.AmbientLight(0xffffff);
 	scene.add(ambientLight);
 	/*var directionalLight = new THREE.DirectionalLight(0xffffff);
 	directionalLight.position.set(1, 1, 1).normalize();

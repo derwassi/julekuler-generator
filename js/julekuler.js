@@ -11,13 +11,15 @@ FAR = 10000;
 
 // set up the sphere vars
 var radius = 50,
-    segments = 16,
-    rings = 16;
+    segments = 64,
+    rings = 41;
 var colors = {
 	0:'white',
-	1:'red',
-	2:'green',
-	3:'blue'
+	1: '#D13535',
+	2: '#580F0F',
+	3: '#98BABD',
+	4 : '#26436E',
+	5: '#021530'
 };
 
 var renderer;
