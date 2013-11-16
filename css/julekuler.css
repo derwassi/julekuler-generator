@@ -18,6 +18,14 @@
 	height:10px;
 	border:1px solid black;
 }
-#texture{
-	
+#texture,#texture-stretched{
+	display:none;
+}
+
+#container, #drawing{
+	float:left;
+	margin:10px;
+}
+body{
+padding: 20px;
 }
