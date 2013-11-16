@@ -1,0 +1,12 @@
+#drawing{
+	position:relative;
+	width:300px;
+	heigth:300px;
+}
+#drawing > div{
+	position:absolute;
+	border:1px solid black;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	box-sizing:border-box;
+}
