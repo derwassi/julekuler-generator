@@ -1,9 +1,24 @@
 #drawing{
 	position:relative;
-	width:300px;
-	heigth:300px;
+	width:160px;
+	height:400px;
 }
 #drawing > div{
 	position:absolute;
 	border:1px solid black;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	box-sizing:border-box;
+}
+
+#colors>div{
+	display:inline-block;
+	margin:5px;
+	width:10px;
+	height:10px;
+	border:1px solid black;
+}
+#texture{
+	width:640px;
+	height:400px;
 }

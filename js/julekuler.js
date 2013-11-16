@@ -44,12 +44,13 @@ var radius = 50,
 var sphere = new THREE.Mesh(
 
   new THREE.SphereGeometry(
-    radius,
-    segments,
-    rings),
+    radius/2,
+    segments/2,
+    rings/2),
 
   sphereMaterial);
-
+sphere.position.x=50;
+sphere.position.y=50;
 // add the sphere to the scene
 scene.add(sphere);
 
@@ -69,23 +70,18 @@ pointLight.position.x = 10;
 pointLight.position.y = 50;
 pointLight.position.z = 130;
 
-// add to the scene
-scene.add(pointLight);
-
-// draw!
-renderer.render(scene, camera);
 
 // sphere geometry
-sphere.geometry
+sphere.geometry;
 
 // which contains the vertices and faces
-sphere.geometry.vertices // an array
-sphere.geometry.faces // also an array
+sphere.geometry.vertices; // an array
+sphere.geometry.faces; // also an array
 
 // its position
-sphere.position // contains x, y and z
-sphere.rotation // same
-sphere.scale // ... same
+sphere.position; // contains x, y and z
+sphere.rotation; // same
+sphere.scale; // ... same
 
 // set the geometry to dynamic
 // so that it allow updates
@@ -97,7 +93,7 @@ sphere.geometry.verticesNeedUpdate = true;
 // changes to the normals
 sphere.geometry.normalsNeedUpdate = true;
 
-var createDrawingSurface = function(centerWidth, centerHeight, drawFunc){
+var traverseDrawingSurface = function(centerWidth, centerHeight, drawFunc){
 	var drawTriangle = function(baseline, lineHeight,drawFunc){
 		var line = 0;
 		var items = 2;
@@ -137,7 +133,87 @@ var createDrawingSurface = function(centerWidth, centerHeight, drawFunc){
 };
 var num=0;
 var a = 10;
-createDrawingSurface(16,13,function(row,col){
-$("#drawing").append($('<div></div>').css('width',a+'px').css('height',a+'px').css('left',col*a + 'px').css('top',row*a + 'px'));
+traverseDrawingSurface(16,13,function(row,col){
+$("#drawing").append($('<div></div>').css('width',a+'px').css('height',a+'px').css('left',col*a + 'px').css('top',row*a + 'px').attr('id','pixel-'+row+'-'+col));
 console.log(num++ + ": " + row+" " + col);
+});
+
+var colors = {
+0:'white',
+1:'red',
+2:'green',
+3:'blue'
+};
+
+var createColorPicker=function(colors){
+	for(var color in colors){
+		$('#colors').append($('<div></div>').attr('data-color',color).css('background-color',colors[color]));	
+	}
+};
+
+
+
+createColorPicker(colors);
+var canvas = $('#texture')[0]
+var context = canvas.getContext("2d");
+
+var texture1 = new THREE.Texture(canvas);
+var material1 = new THREE.MeshBasicMaterial( {map: texture1, color:'#aaa'} );
+var mesh1 = new THREE.Mesh(
+	 new THREE.SphereGeometry(
+    radius,
+    segments,
+    rings),
+	material1
+);
+// changes to the vertices
+mesh1.geometry.verticesNeedUpdate = true;
+
+// changes to the normals
+mesh1.geometry.normalsNeedUpdate = true;
+scene.add(mesh1);
+scene.needsUpdate = true;
+// add to the scene
+scene.add(pointLight);
+
+// draw!
+renderer.render(scene, camera);
+
+var redraw=function(){
+	context.fillStyle='#aaa';
+	context.fillRect(0,0,640,400);
+	traverseDrawingSurface(16,13,function(row,col){
+		var c=parseInt($('#pixel-'+row+'-'+col).attr('data-color'));
+		if(!c) c =0;
+		context.fillStyle=colors[c];
+		for(var i=0;i<4;i++){
+			context.fillRect(i*80+5*col,5*row,5,5);
+
+		}
+		//context.fillStyle = '#000';
+		//context.fillRect(col,row,10,10);
+	});
+	
+	texture1.needsUpdate = true;
+	scene.needsUpdate=true;
+	renderer.render(scene,camera);
+	
+};
+
+var curCol=0;
+$('#colors>div').click(function(el){
+	curCol = parseInt($(el.target).attr('data-color'));
+});
+
+$("#drawing >div").click(function(el){
+	$el = $(el.target);
+	var c = parseInt($el.attr('data-color'));
+	if(c == curCol){
+		$el.attr('data-color',0);
+	}else{
+		$el.attr('data-color',curCol);
+	}
+	var c = parseInt($el.attr('data-color'));
+	$el.css('background-color',colors[c]);
+	redraw();
 });
