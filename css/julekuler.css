@@ -14,9 +14,33 @@
 #colors>div{
 	display:inline-block;
 	margin:5px;
-	width:10px;
-	height:10px;
+	width:20px;
+	height:40px;
+	
+}
+#colors>div>div{
+	width:20px;
+	height:20px;
+}
+#colors .picker{
 	border:1px solid black;
+	box-sizing:border-box;
+	
+}
+#colors .picker.current{
+	border:3px solid black;
+	
+}
+#colors .edit{
+	background-color:#fff;
+cursor:pointer;
+}
+#colors .edit:before{
+	content:'\f044';
+	color:black;
+	font-family:FontAwesome;
+	font-size:24px;
+	cursor:pointer;
 }
 #texture,#texture-stretched{
 	display:none;

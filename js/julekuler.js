@@ -30,6 +30,8 @@ var context;
 var canvasStretched;
 var contextStretched;
 var julekulerTexture;
+var curCol=0;
+
 var initThreeJs = function(container){
 	// get the DOM element to attach to
 	// - assume we've got jQuery to hand
@@ -199,13 +201,63 @@ var redraw = function(config){
 	
 };
 
+//Function to convert hex format to a rgb color
+var rgb2hex=function(rgb){
+ rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+ return "#" +
+  ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+  ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+  ("0" + parseInt(rgb[3],10).toString(16)).slice(-2);
+}
+
+var updateColors = function(){
+	colors=[];
+	$.each(	$("#colors > div"), function(idx, el){
+		colors[parseInt($(el).attr('data-color'))] = $('.picker', el).css('background-color');
+	});
+	traverseDrawingSurface(16,13,function(row,col){
+		$el = $('#pixel-'+row+'-'+col);
+		var val = parseInt($el.attr('data-color'));
+		$el.css('background-color',colors[val]);
+	});
+	julekulerTexture.needsUpdate=true;
+	
+}
+
+var createColorPicker=function(colors){
+	$('#colors').empty();
+	for(var color in colors){
+		var $picker = $('<div class="picker"></div>').css('background-color',colors[color])
+		$('#colors').append($('<div><div class="edit"></div></div>').attr('data-color',color).prepend($picker));	
+	}
+	$('#colors>div .picker').click(function(el){
+		curCol = parseInt($(el.target).parent().attr('data-color'));
+		$('#colors>div .picker').removeClass('current');
+		$(el.target).addClass('current');
+	});
+	$.each(	$("#colors > div"), function(idx, el){
+		console.log(el);
+		console.log($('.picker', $(el)).css('background-color'));
+		$('.edit',$(el)).ColorPicker({
+			flat: false,
+			color: rgb2hex($('.picker', $(el)).css('background-color')),
+			onSubmit: function(hsb, hex, rgb) {
+				console.log(hex);
+				$('.picker', $(el)).css('background-color','#' + hex);
+				updateColors();
+			}
+		});
+
+	});
+};
+
 var addEvents = function(){
 	var centerWidth=16;
-	var curCol=0;
-	$('#colors>div').click(function(el){
-		curCol = parseInt($(el.target).attr('data-color'));
-	});
+	
 
+	
+
+	
 	$("#drawing >div").click(function(el){
 		$el = $(el.target);
 		var c = parseInt($el.attr('data-color'));
@@ -230,7 +282,7 @@ var addEvents = function(){
 	$("#load").click(function(){
 		var obj = JSON.parse($('#load-save').val());
 		colors = obj.colors;
-		
+		createColorPicker(colors);
 		traverseDrawingSurface(16,13,function(row,col){
 				var $el = $('#pixel-'+row+'-'+col);
 				$el.attr('data-color',obj.pattern[row][col]);
@@ -273,11 +325,7 @@ var addEvents = function(){
 
 
 
-var createColorPicker=function(colors){
-	for(var color in colors){
-		$('#colors').append($('<div></div>').attr('data-color',color).css('background-color',colors[color]));	
-	}
-};
+
 
 
 /**
