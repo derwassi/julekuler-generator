@@ -134,15 +134,17 @@ var traverseDrawingSurface = function(centerWidth, centerHeight, drawFunc){
 			}
 		}
 	};
-	drawTriangle(centerWidth,2,function(row,col){
-		drawFunc(row,col);
-	});
-	drawRectangle(centerWidth,centerHeight,function(row,col){
-		drawFunc(row+centerWidth-2,col);
-	});
-	drawTriangle(centerWidth,2,function(row,col){
-		drawFunc(2*(centerWidth-2)+centerHeight-row-1,col);
-	});
+	for(var i=0;i<4;i++){
+		drawTriangle(centerWidth,2,function(row,col){
+			drawFunc(row,i*centerWidth+col);
+		});
+		drawRectangle(centerWidth,centerHeight,function(row,col){
+			drawFunc(row+centerWidth-2,i*centerWidth+col);
+		});
+		drawTriangle(centerWidth,2,function(row,col){
+			drawFunc(2*(centerWidth-2)+centerHeight-row-1,i*centerWidth+col);
+		});
+	}
 	
 };
 
@@ -168,10 +170,9 @@ var redraw = function(config){
 		var c=parseInt($('#pixel-'+row+'-'+col).attr('data-color'));
 		if(!c) c =0;
 		context.fillStyle=colors[c];
-		for(var i=0;i<4;i++){
-			context.fillRect(i*80+5*col,5*row,5,5);
 
-		}
+			context.fillRect(5*col,5*row,5,5);
+
 		//context.fillStyle = '#000';
 		//context.fillRect(col,row,10,10);
 	});
