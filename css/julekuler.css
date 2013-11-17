@@ -50,6 +50,10 @@ cursor:pointer;
 	float:left;
 	margin:10px;
 }
+
+#update-3d-view{
+display:block;
+}
 body{
 padding: 20px;
 }

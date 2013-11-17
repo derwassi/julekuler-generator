@@ -226,7 +226,7 @@ var redraw = function(config){
 		context.fillStyle=colors[c];
 		//context.drawImage(imgObj,0,0,125,150,5*col,5*row,5,5);
 			//context.fillRect(50*col,50*row,50,50);
-context.drawImage(colorCanvas,0,0,14,18,a*col-4,a*row-4,14,18);
+context.drawImage(colorCanvas,0,0,14,18,a*col,a*row-4,10,18);
 
 		//context.fillStyle = '#000';
 		//context.fillRect(col,row,10,10);

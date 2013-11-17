@@ -50,8 +50,8 @@
 	<label for="insync">edit in sync</label><input type="checkbox" id="insync" value="1"/>
 	<div id="colors"></div>
 	<div id="drawing"></div>
-	<canvas id="texture" width="3200" height="2050"></canvas>
-	<canvas id="texture-stretched" width="3200" height="2050"></canvas>
+	<canvas id="texture" width="640" height="410"></canvas>
+	<canvas id="texture-stretched" width="640" height="410"></canvas>
 	<div id="container"></div>
 
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>

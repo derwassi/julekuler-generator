@@ -43,7 +43,7 @@ cursor:pointer;
 	cursor:pointer;
 }
 #texture,#texture-stretched{
-	display:block;
+	display:none;
 }
 
 #container, #drawing{

@@ -331,7 +331,7 @@ var addEvents = function(){
 				$el.attr('data-color',c);
 			}
 		}
-		redraw();
+		
 	});
 	$("#load").click(function(){
 		var obj = JSON.parse($('#load-save').val());
@@ -374,6 +374,11 @@ var addEvents = function(){
 			});
 		});
 		$(this).val("");
+	});
+	$("#update-3d-view").click(function(){
+		redraw();
+		texture1.needsUpdate = true;
+
 	});
 }
 
