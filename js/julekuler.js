@@ -31,6 +31,35 @@ var canvasStretched;
 var contextStretched;
 var julekulerTexture;
 var curCol=0;
+var imgObj = new Image();
+var woolCanvas = document.createElement("canvas");
+woolCanvas.width=14;
+woolCanvas.height=18;
+var woolContext = woolCanvas.getContext('2d');
+var colorCanvas = document.createElement("canvas");
+woolCanvas.width=14;
+woolCanvas.height=18;
+colorContext = colorCanvas.getContext('2d');
+
+
+function getBase64Image(img) {
+    // Create an empty canvas element
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    // Copy the image contents to the canvas
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+
+    // Get the data-URL formatted image
+    // Firefox supports PNG and JPEG. You could check img.src to
+    // guess the original format, but be aware the using "image/jpg"
+    // will re-encode the image.
+    var dataURL = canvas.toDataURL("image/png");
+
+    return dataURL;
+}
 
 var initThreeJs = function(container){
 	// get the DOM element to attach to
@@ -44,8 +73,10 @@ var initThreeJs = function(container){
 		NEAR,
 		FAR);
 	renderer.setClearColorHex(0x333F47, 1); 
-
-
+	imgObj.src = 'images/bg.png';
+	imgObj.onload = function(){
+		woolCanvas.getContext('2d').drawImage(imgObj,0,0,125,150,0,0,woolCanvas.width,woolCanvas.height);
+	}
 	scene = new THREE.Scene();
   
 	//add the camera to the scene
@@ -105,6 +136,7 @@ var addJulekuler = function(config){
 	mesh1.geometry.normalsNeedUpdate = true;
 	scene.add(mesh1);
 	scene.needsUpdate = true;
+
 	// add to the scene
 	
 };
@@ -166,32 +198,54 @@ var createJulekulerCanvas = function(config){
 };
 
 var redraw = function(config){
+	var a = 10;
+	
 	context.fillStyle='#aaa';
-	context.fillRect(0,0,640,400);
+	context.fillRect(0,0,640,410);
+	var lastcol = null;
 	traverseDrawingSurface(16,13,function(row,col){
 		var c=parseInt($('#pixel-'+row+'-'+col).attr('data-color'));
 		if(!c) c =0;
-		context.fillStyle=colors[c];
+		if(c!=lastcol){
+			console.log()
+			colorContext.fillStyle=colors[c];
+			colorContext.fillRect(0,0,1,1);
+			var myCol = colorContext.getImageData(0,0,1,1);
+			colorContext.drawImage(woolCanvas,0,0);
+			colorContext.clearRect(0,0,colorCanvas.width,colorCanvas.height);
+			
+			var pixels = woolContext.getImageData(0,0,colorCanvas.width, colorCanvas.height);
+			for(var i=0;i<pixels.data.length;i++){
+				pixels.data[i] = pixels.data[i]/255.0*myCol.data[i%4];
 
-			context.fillRect(5*col,5*row,5,5);
+			}
+			colorContext.putImageData(pixels,0,0);
+		}
+
+		lastcol = c;
+		context.fillStyle=colors[c];
+		//context.drawImage(imgObj,0,0,125,150,5*col,5*row,5,5);
+			//context.fillRect(50*col,50*row,50,50);
+context.drawImage(colorCanvas,0,0,14,18,a*col,a*row-4,10,18);
 
 		//context.fillStyle = '#000';
 		//context.fillRect(col,row,10,10);
 	});
+	
 	contextStretched.drawImage(canvas,0,0);
 	for(var i=0;i<7;i++){
 		for(var j=0;j<4;j++){
-			var fromx=j*80+(16/2-(i+1))*5;
-			var fromy=i*10;
-			var fromwidth=(i+1)*2*5;
-			var fromheight=10;
-			var tox=j*80;
-			var toy=i*10;
-			var towidth=80;
-			var toheight=10;
+			var fromx=j*16*a+(16/2-(i+1))*a;
+			var fromy=i*2*a;
+			var fromwidth=(i+1)*2*a;
+			var fromheight=2*a;
+			var tox=j*16*a;
+			var toy=i*2*a;
+			var towidth=16*a;
+			var toheight=2*a;
 			console.log(fromx,fromy,fromwidth,fromheight,tox,toy,towidth,toheight);
 			contextStretched.drawImage(canvas,fromx ,fromy ,fromwidth ,fromheight ,tox ,toy , towidth, toheight);
-			contextStretched.drawImage(canvas,fromx ,205-fromy-10 ,fromwidth ,fromheight ,tox ,205-toy-10 , towidth, toheight);
+			contextStretched.drawImage(canvas,fromx ,41*a-fromy-2*a ,fromwidth ,fromheight ,tox ,41*a-toy-2*a , towidth, toheight);
 		}
 			
 	}
