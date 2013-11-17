@@ -1,7 +1,7 @@
 #drawing{
 	position:relative;
-	width:160px;
-	height:400px;
+	width:640px;
+	height:410px;
 }
 #drawing > div{
 	position:absolute;

@@ -134,15 +134,17 @@ var traverseDrawingSurface = function(centerWidth, centerHeight, drawFunc){
 			}
 		}
 	};
-	drawTriangle(centerWidth,2,function(row,col){
-		drawFunc(row,col);
-	});
-	drawRectangle(centerWidth,centerHeight,function(row,col){
-		drawFunc(row+centerWidth-2,col);
-	});
-	drawTriangle(centerWidth,2,function(row,col){
-		drawFunc(2*(centerWidth-2)+centerHeight-row-1,col);
-	});
+	for(var i=0;i<4;i++){
+		drawTriangle(centerWidth,2,function(row,col){
+			drawFunc(row,i*centerWidth+col);
+		});
+		drawRectangle(centerWidth,centerHeight,function(row,col){
+			drawFunc(row+centerWidth-2,i*centerWidth+col);
+		});
+		drawTriangle(centerWidth,2,function(row,col){
+			drawFunc(2*(centerWidth-2)+centerHeight-row-1,i*centerWidth+col);
+		});
+	}
 	
 };
 
@@ -168,10 +170,9 @@ var redraw = function(config){
 		var c=parseInt($('#pixel-'+row+'-'+col).attr('data-color'));
 		if(!c) c =0;
 		context.fillStyle=colors[c];
-		for(var i=0;i<4;i++){
-			context.fillRect(i*80+5*col,5*row,5,5);
 
-		}
+			context.fillRect(5*col,5*row,5,5);
+
 		//context.fillStyle = '#000';
 		//context.fillRect(col,row,10,10);
 	});
@@ -188,7 +189,7 @@ var redraw = function(config){
 			var toheight=10;
 			console.log(fromx,fromy,fromwidth,fromheight,tox,toy,towidth,toheight);
 			contextStretched.drawImage(canvas,fromx ,fromy ,fromwidth ,fromheight ,tox ,toy , towidth, toheight);
-			contextStretched.drawImage(canvas,fromx ,205-fromy-10 ,fromwidth ,fromheight ,tox ,205-toy , towidth, toheight);
+			contextStretched.drawImage(canvas,fromx ,205-fromy-10 ,fromwidth ,fromheight ,tox ,205-toy-10 , towidth, toheight);
 		}
 			
 	}
@@ -199,6 +200,7 @@ var redraw = function(config){
 };
 
 var addEvents = function(){
+	var centerWidth=16;
 	var curCol=0;
 	$('#colors>div').click(function(el){
 		curCol = parseInt($(el.target).attr('data-color'));
@@ -239,6 +241,24 @@ var addEvents = function(){
 			s[row][col]=val;
 		});
 		$('#load-save').val(JSON.stringify({colors:colors,pattern:s}));	
+	});
+	$("#copyover").change(function(){
+		console.log($(this).val());
+		$.each($(this).val().split('|'),function(k,v){
+			var copy=v.split('-');
+			copy[0]=parseInt(copy[0])-1;
+			copy[1]=parseInt(copy[1])-1;
+			console.log(copy);
+			traverseDrawingSurface(16,13,function(row,col){
+				if(col>=copy[0]*centerWidth && col<(copy[0]+1)*centerWidth){
+					var val = parseInt($('#pixel-'+row+'-'+col).attr('data-color'));
+					var $el = $('#pixel-'+row+'-'+col-(copy[0]*centerWidth)+(copy[1]*centerWidth));
+					$el.attr('data-color',val);
+					$el.css('background-color',colors[val]);
+				}			
+			});
+		});
+		$(this).val("");
 	});
 }
 

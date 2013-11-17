@@ -26,3 +26,6 @@
 	float:left;
 	margin:10px;
 }
+body{
+padding: 20px;
+}

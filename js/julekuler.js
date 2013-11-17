@@ -189,7 +189,7 @@ var redraw = function(config){
 			var toheight=10;
 			console.log(fromx,fromy,fromwidth,fromheight,tox,toy,towidth,toheight);
 			contextStretched.drawImage(canvas,fromx ,fromy ,fromwidth ,fromheight ,tox ,toy , towidth, toheight);
-			contextStretched.drawImage(canvas,fromx ,205-fromy-10 ,fromwidth ,fromheight ,tox ,205-toy , towidth, toheight);
+			contextStretched.drawImage(canvas,fromx ,205-fromy-10 ,fromwidth ,fromheight ,tox ,205-toy-10 , towidth, toheight);
 		}
 			
 	}
@@ -200,6 +200,7 @@ var redraw = function(config){
 };
 
 var addEvents = function(){
+	var centerWidth=16;
 	var curCol=0;
 	$('#colors>div').click(function(el){
 		curCol = parseInt($(el.target).attr('data-color'));
@@ -240,6 +241,24 @@ var addEvents = function(){
 			s[row][col]=val;
 		});
 		$('#load-save').val(JSON.stringify({colors:colors,pattern:s}));	
+	});
+	$("#copyover").change(function(){
+		console.log($(this).val());
+		$.each($(this).val().split('|'),function(k,v){
+			var copy=v.split('-');
+			copy[0]=parseInt(copy[0])-1;
+			copy[1]=parseInt(copy[1])-1;
+			console.log(copy);
+			traverseDrawingSurface(16,13,function(row,col){
+				if(col>=copy[0]*centerWidth && col<(copy[0]+1)*centerWidth){
+					var val = parseInt($('#pixel-'+row+'-'+col).attr('data-color'));
+					var $el = $('#pixel-'+row+'-'+(col-(copy[0]*centerWidth)+(copy[1]*centerWidth)));
+					$el.attr('data-color',val);
+					$el.css('background-color',colors[val]);
+				}			
+			});
+		});
+		$(this).val("");
 	});
 }
 
