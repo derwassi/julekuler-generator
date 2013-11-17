@@ -216,6 +216,15 @@ var addEvents = function(){
 		}
 		var c = parseInt($el.attr('data-color'));
 		$el.css('background-color',colors[c]);
+		if($('#insync').is(':checked')){
+			var pos = $el.attr('id').split('-');
+			for(var i=1;i<4;i++){
+				console.log('#pixel-' + pos[1]+'-'+((parseInt(pos[2])+i*centerWidth)%(4*centerWidth)));
+				$el = $('#pixel-' + pos[1]+'-'+((parseInt(pos[2])+i*centerWidth)%(4*centerWidth)));
+				$el.css('background-color',colors[c]);
+				$el.attr('data-color',c);
+			}
+		}
 		redraw();
 	});
 	$("#load").click(function(){

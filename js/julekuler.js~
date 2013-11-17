@@ -216,6 +216,15 @@ var addEvents = function(){
 		}
 		var c = parseInt($el.attr('data-color'));
 		$el.css('background-color',colors[c]);
+		if($('#insync').is(':checked')){
+			var pos = $el.attr('id').split('-');
+			for(var i=1;i<4;i++){
+				console.log('#pixel-' + pos[1]+'-'+((parseInt(pos[1])+i*centerWidth)%(4*centerWidth)));
+				$el = $('#pixel-' + pos[1]+'-'+((parseInt(pos[1])+i*centerWidth)%(4*centerWidth)));
+				$el.css('background-color',colors[c]);
+				$el.attr('data-color',c);
+			}
+		}
 		redraw();
 	});
 	$("#load").click(function(){
@@ -252,7 +261,7 @@ var addEvents = function(){
 			traverseDrawingSurface(16,13,function(row,col){
 				if(col>=copy[0]*centerWidth && col<(copy[0]+1)*centerWidth){
 					var val = parseInt($('#pixel-'+row+'-'+col).attr('data-color'));
-					var $el = $('#pixel-'+row+'-'+col-(copy[0]*centerWidth)+(copy[1]*centerWidth));
+					var $el = $('#pixel-'+row+'-'+(col-(copy[0]*centerWidth)+(copy[1]*centerWidth)));
 					$el.attr('data-color',val);
 					$el.css('background-color',colors[val]);
 				}			
