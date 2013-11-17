@@ -45,9 +45,25 @@ cursor:pointer;
 #texture,#texture-stretched{
 	display:none;
 }
+.controls{
+	width:300px;
+}
+.container, .controls{
+float:left;
+}
+.drawing{
+	max-width:660px;
+}
+.drawing, .controls{
+	margin-right:10px;
+}
+.container{
+	width:490px;
 
+	
+}
 #container, #drawing{
-	float:left;
+	
 	margin:10px;
 }
 
@@ -56,4 +72,14 @@ display:block;
 }
 body{
 padding: 20px;
+}
+body > div, .controls .panel-body>div{
+	margin:10px 0;
+}
+body>div{
+	float:left;
+	min-height:460px;
+}
+body>div.colorpicker{
+	min-height:0;
 }

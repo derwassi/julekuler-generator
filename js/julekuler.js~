@@ -76,6 +76,7 @@ var initThreeJs = function(container){
 	imgObj.src = 'images/bg.png';
 	imgObj.onload = function(){
 		woolCanvas.getContext('2d').drawImage(imgObj,0,0,125,150,0,0,woolCanvas.width,woolCanvas.height);
+		redraw();
 	}
 	scene = new THREE.Scene();
   
