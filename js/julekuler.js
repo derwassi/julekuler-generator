@@ -76,6 +76,7 @@ var initThreeJs = function(container){
 	imgObj.src = 'images/bg.png';
 	imgObj.onload = function(){
 		woolCanvas.getContext('2d').drawImage(imgObj,0,0,125,150,0,0,woolCanvas.width,woolCanvas.height);
+		redraw();
 	}
 	scene = new THREE.Scene();
   
@@ -344,6 +345,8 @@ var addEvents = function(){
 			
 			
 		});
+		redraw();
+		texture1.needsUpdate = true;
 
 	});
 	$("#save").click(function(){
@@ -374,6 +377,8 @@ var addEvents = function(){
 			});
 		});
 		$(this).val("");
+		redraw();
+		texture1.needsUpdate = true;
 	});
 	$("#update-3d-view").click(function(){
 		redraw();
@@ -412,6 +417,8 @@ window.julekuler.start = function(config){
 	createColorPicker(colors);
 	
 	addEvents();
+	redraw();
+	texture1.needsUpdate = true;
 };
 
 
