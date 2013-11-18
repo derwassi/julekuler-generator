@@ -373,7 +373,11 @@ var addEvents = function(){
 		
 	});
 	$("#load").click(function(){
+<<<<<<< HEAD
+		loadPattern($('#load-save').val());
+=======
 		loadPatternString($('#load-save').val());
+>>>>>>> f4b8c93617ead0fb6cb05922324e09193146c8b7
 		return false;
 
 	});

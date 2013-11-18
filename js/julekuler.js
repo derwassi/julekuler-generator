@@ -374,6 +374,7 @@ var addEvents = function(){
 	});
 	$("#load").click(function(){
 		loadPattern($('#load-save').val());
+
 		return false;
 
 	});
