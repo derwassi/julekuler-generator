@@ -14,7 +14,7 @@
 #colors>div{
 	display:inline-block;
 	margin:5px;
-	width:20px;
+	width:19px;
 	height:40px;
 	
 }
@@ -42,7 +42,7 @@ cursor:pointer;
 	font-size:24px;
 	cursor:pointer;
 }
-#texture,#texture-stretched{
+#texture,#texture-stretched,#export-canvas{
 	display:none;
 }
 .controls{
@@ -81,5 +81,5 @@ body>div{
 	min-height:460px;
 }
 body>div.colorpicker{
-	height:176px;
+	min-height:0;
 }

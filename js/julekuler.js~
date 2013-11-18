@@ -398,9 +398,12 @@ var rgb2hex=function(rgb){
 
 var updateColors = function(){
 	colors=[];
+	
 	$.each(	$("#colors > div"), function(idx, el){
 		colors[parseInt($(el).attr('data-color'))] = $('.picker', el).css('background-color');
 	});
+
+	createColorPicker(colors);
 	traverseDrawingSurface(16,13,function(row,col){
 		$el = $('#pixel-'+row+'-'+col);
 		var val = parseInt($el.attr('data-color'));
@@ -412,9 +415,11 @@ var updateColors = function(){
 
 var createColorPicker=function(colors){
 	$('#colors').empty();
+	var i=0;
 	for(var color in colors){
 		var $picker = $('<div class="picker"></div>').css('background-color',colors[color])
-		$('#colors').append($('<div><div class="edit"></div></div>').attr('data-color',color).prepend($picker));	
+		$('#colors').append($('<div><div class="edit"></div></div>').attr('data-color',color).prepend($picker));
+		if(i++>=8) break;	
 	}
 	$('#colors>div .picker').click(function(el){
 		curCol = parseInt($(el.target).parent().attr('data-color'));
@@ -438,55 +443,41 @@ var createColorPicker=function(colors){
 };
 
 var loadPattern = function(patternstring){
-	try{
-	var obj = JSON.parse(patternstring);
-	}catch(e){}
-	if(obj){
-		colors = obj.colors;
-		createColorPicker(colors);
-		traverseDrawingSurface(16,13,function(row,col){
-				var $el = $('#pixel-'+row+'-'+col);
-				$el.attr('data-color',obj.pattern[row][col]);
-				$el.css('background-color',colors[obj.pattern[row][col]]);
-		
-		
-		});
-	}else{
-		patternstring = patternstring.split(';');
-		
-		for(var index in patternstring){
-			var parameter = patternstring[index].split('=');
-			//console.log(parameter);
-			if(parameter.length==2){
-				if(parameter[0]=='colors'){
-					colors = JSON.parse(parameter[1]);				
-				}			
-				if(parameter[0]=='data'){
-					var data = parameter[1];
-					console.log(data);
-					var i=0;
-					var bin=0;
-					traverseDrawingSurface(16,13,function(row,col){
-							var $el = $('#pixel-'+row+'-'+col);
-	
-							var bin = decode6BitToChar(data.charAt(Math.floor(i/2)));		
-							console.log(bin);							
-							if(i%2==1){
-								bin = bin>>3//last three bit
-							}else{
-								bin = bin&7;//first three bit
-							}
-							console.log(bin);
-							i++;
-							$el.attr('data-color',bin);
-							$el.css('background-color',colors[bin]);
-							
-						
-					});
-				}
+	patternstring = patternstring.split(';');
+	var data = '';
+	for(var index in patternstring){
+		var parameter = patternstring[index].split('=');
+		//console.log(parameter);
+		if(parameter.length==2){
+			if(parameter[0]=='colors'){
+				colors = JSON.parse(parameter[1]);
+
+				createColorPicker(colors);			
+			}			
+			if(parameter[0]=='data'){
+				var data = parameter[1];
+				
 			}
 		}
 	}
+
+	var i=0;
+	var bin=0;
+	traverseDrawingSurface(16,13,function(row,col){
+			var $el = $('#pixel-'+row+'-'+col);
+
+			var bin = decode6BitToChar(data.charAt(Math.floor(i/2)));		
+			if(i%2==1){
+				bin = bin>>3//last three bit
+			}else{
+				bin = bin&7;//first three bit
+			}
+			i++;
+			$el.attr('data-color',bin);
+			$el.css('background-color',colors[bin]);
+			
+		
+	});
 	redraw();
 	texture1.needsUpdate = true;
 	
@@ -610,6 +601,52 @@ var addEvents = function(){
 		texture1.needsUpdate = true;
 		return false;
 
+	});
+	$("#save-to-image").click(function(){
+		var exportCanvas = $('#export-image')[0];
+		var exportContext = exportCanvas.getContext('2d');
+		exportContext.strokeStyle = "#000";
+		exportContext.fillStyle='#fff';
+
+		exportContext.fillRect(0,0,exportCanvas.width,exportCanvas.height);
+		exportContext.fillStyle='#000';
+
+		exportContext.font = '60pt Arial';
+		var top= 80;
+		var left=20;
+		exportContext.fillText($('#title').val(),left,top);
+		
+		top=1004;
+		var a = 20;
+		exportContext.font = '10pt Arial';
+		exportContext.fillText('created using julekuler-generator on ' + window.location.protocol+"//"+window.location.host+window.location.pathname,left,top);
+		
+
+		top = 120
+		exportContext.font = '20pt Arial';
+		var textWidth = exportContext.measureText('Colors:');
+		exportContext.fillText('Colors:',left,top+20);
+		
+		for(var color in colors){
+			exportContext.beginPath();
+				exportContext.fillStyle = colors[color];
+				exportContext.rect(textWidth.width + a+ color*a*2+left,top,a,a);
+				exportContext.fill();
+				exportContext.stroke();	
+		}
+		exportContext.fillStyle='#fff';
+		top= 170;
+		
+		traverseDrawingSurface(16,13,function(row,col){
+				exportContext.fillStyle = colors[parseInt($('#pixel-'+row+'-'+col).attr('data-color'))];
+				console.log('.');
+				exportContext.beginPath();
+				exportContext.rect(col*a+left,row*a+top,a,a);
+				exportContext.fill();
+				exportContext.stroke();	
+					
+			});
+		Canvas2Image.saveAsPNG(oCanvas);
 	});
 }
 
