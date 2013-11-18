@@ -453,6 +453,10 @@ var loadPattern = function(patternstring){
 				colors = JSON.parse(parameter[1]);
 
 				createColorPicker(colors);			
+			}
+			if(parameter[0]=='title'){
+				document.title=parameter[1]+ ' - Julekuler generator';
+				$('#title').val(parameter[1] );		
 			}			
 			if(parameter[0]=='data'){
 				var data = parameter[1];
@@ -572,7 +576,7 @@ var addEvents = function(){
 		var json = JSON.stringify({colors:colors,pattern:s});
 		$('#load-save').val(json);	
 		document.title = $('#title').val() + " - Julekuler generator";
-		window.location.hash = '#colors='+JSON.stringify(colors)+';data=' + res;
+		window.location.hash = '#colors='+JSON.stringify(colors)+';title='+$('#title').val()+';data=' + res;
 		return createBookmarkLink();
 
 	});
