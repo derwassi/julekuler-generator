@@ -97,6 +97,8 @@
 	<script src="js/vendor/three.min.js"></script>
 	<script src="js/OrbitControls.js"></script>
         <script src="js/plugins.js"></script>
+        <script src="js/canvas2image.js"></script>
+        <script src="js/base64.js"></script>
         <script src="js/main.js"></script>
 	<script src="js/colorpicker.js"></script>
 	<script src="js/julekuler.js"></script>
