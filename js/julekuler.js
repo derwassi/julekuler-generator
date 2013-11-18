@@ -647,6 +647,7 @@ var addEvents = function(){
 					
 			});
 		Canvas2Image.saveAsPNG(exportCanvas);
+		return false;
 	});
 }
 
