@@ -306,6 +306,43 @@ var createColorPicker=function(colors){
 	});
 };
 
+var loadPattern = function(patternstring){
+	var obj = JSON.parse(patternstring);
+	colors = obj.colors;
+	createColorPicker(colors);
+	traverseDrawingSurface(16,13,function(row,col){
+			var $el = $('#pixel-'+row+'-'+col);
+			$el.attr('data-color',obj.pattern[row][col]);
+			$el.css('background-color',colors[obj.pattern[row][col]]);
+		
+		
+	});
+	redraw();
+	texture1.needsUpdate = true;
+	
+};
+
+var createBookmarkLink=function() {
+    var title = document.title;
+    var url = document.location.href;
+ 
+    if(window.sidebar && window.sidebar.addPanel){
+        /* Mozilla Firefox Bookmark */
+        window.sidebar.addPanel(title, url, "");
+    }else if(window.external && window.external.AddFavorite){
+        /* IE Favorite */
+        window.external.AddFavorite(url, title);
+    }else if(window.opera && window.print) {
+        /* Opera Hotlist */
+        alert("Press Control + D to bookmark");
+        return true;
+    }else{
+        /* Other */
+        alert("Press Control + D to bookmark");
+    }
+    return false;
+}
+
 var addEvents = function(){
 	var centerWidth=16;
 	
@@ -332,21 +369,12 @@ var addEvents = function(){
 				$el.attr('data-color',c);
 			}
 		}
+		return false;
 		
 	});
 	$("#load").click(function(){
-		var obj = JSON.parse($('#load-save').val());
-		colors = obj.colors;
-		createColorPicker(colors);
-		traverseDrawingSurface(16,13,function(row,col){
-				var $el = $('#pixel-'+row+'-'+col);
-				$el.attr('data-color',obj.pattern[row][col]);
-				$el.css('background-color',colors[obj.pattern[row][col]]);
-			
-			
-		});
-		redraw();
-		texture1.needsUpdate = true;
+		loadPatternString($('#load-save').val());
+		return false;
 
 	});
 	$("#save").click(function(){
@@ -358,7 +386,12 @@ var addEvents = function(){
 			
 			s[row][col]=val;
 		});
-		$('#load-save').val(JSON.stringify({colors:colors,pattern:s}));	
+		var json = JSON.stringify({colors:colors,pattern:s});
+		$('#load-save').val(json);	
+		document.title = $('#title').val() + " - Julekuler generator";
+		window.location.hash = '#' + encodeURIComponent(json);
+		return createBookmarkLink();
+
 	});
 	$("#copyover").change(function(){
 		console.log($(this).val());
@@ -383,12 +416,17 @@ var addEvents = function(){
 	$("#update-3d-view").click(function(){
 		redraw();
 		texture1.needsUpdate = true;
+		return false;
 
 	});
 }
 
 
-
+var loadFromUrl = function(){
+	var hash=window.location.hash;
+	if(hash.length>0) hash = hash.substr(1);
+	loadPattern(decodeURIComponent(hash));
+}
 
 
 
@@ -417,6 +455,7 @@ window.julekuler.start = function(config){
 	createColorPicker(colors);
 	
 	addEvents();
+	loadFromUrl();
 	redraw();
 	texture1.needsUpdate = true;
 };
