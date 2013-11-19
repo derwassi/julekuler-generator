@@ -45,24 +45,21 @@ cursor:pointer;
 #texture,#texture-stretched,#export-image{
 	display:none;
 }
-#controls{
+.controls{
 	width:300px;
 }
-#container, #controls{
-float:left;
-}
-#drawing{
+.drawing{
 	max-width:660px;
 }
-#drawing, #controls{
+.drawing, .controls{
 	margin-right:10px;
 }
-#container{
+.container{
 	width:490px;
 
 	
 }
-#container, #drawing{
+.container, .drawing{
 	
 	margin:10px;
 }
@@ -73,10 +70,10 @@ display:block;
 body{
 padding: 20px;
 }
-body > div, .controls .panel-body>div{
+body > div, #controls .panel-body>div{
 	margin:10px 0;
 }
-#drawing,#controls,#container{
+.drawing,.controls,.container{
 	float:left;
 	min-height:460px;
 }
