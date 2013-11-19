@@ -511,7 +511,7 @@ var loadPattern = function(patternstring){
 		
 	});
 	redraw();
-	texture1.needsUpdate = true;
+	//if(texture1) texture1.needsUpdate = true;
 	
 };
 
@@ -695,7 +695,7 @@ julekuler.start = function(config){
 	addEvents();
 	loadFromUrl();
 	redraw();
-	texture1.needsUpdate = true;
+	//texture1.needsUpdate = true;
 };
 
 
