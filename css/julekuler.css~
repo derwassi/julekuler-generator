@@ -42,22 +42,22 @@ cursor:pointer;
 	font-size:24px;
 	cursor:pointer;
 }
-#texture,#texture-stretched,#export-canvas{
+#texture,#texture-stretched,#export-image{
 	display:none;
 }
-.controls{
+#controls{
 	width:300px;
 }
-.container, .controls{
+#container, #controls{
 float:left;
 }
-.drawing{
+#drawing{
 	max-width:660px;
 }
-.drawing, .controls{
+#drawing, #controls{
 	margin-right:10px;
 }
-.container{
+#container{
 	width:490px;
 
 	
@@ -76,7 +76,7 @@ padding: 20px;
 body > div, .controls .panel-body>div{
 	margin:10px 0;
 }
-body>div{
+#drawing,#controls,#container{
 	float:left;
 	min-height:460px;
 }
