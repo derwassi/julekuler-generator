@@ -59,7 +59,7 @@ cursor:pointer;
 
 	
 }
-.container, .drawing{
+#container, #drawing{
 	
 	margin:10px;
 }

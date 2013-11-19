@@ -70,7 +70,7 @@ display:block;
 body{
 padding: 20px;
 }
-body > div, #controls .panel-body>div{
+body > div, .controls .panel-body>div{
 	margin:10px 0;
 }
 .drawing,.controls,.container{
