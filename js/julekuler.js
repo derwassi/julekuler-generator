@@ -209,10 +209,11 @@ var initThreeJs = function(container){
 	
 	if(uneCanvas){
 		renderer = new THREE.WebGLRenderer();
+		
+	}else{
 		radius = 50;
 		segments = 10;
 		rings = 7;
-	}else{
 		renderer = new THREE.CanvasRenderer();
 	}
 	camera = new THREE.PerspectiveCamera(
