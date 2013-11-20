@@ -171,6 +171,7 @@ var colorCanvas = document.createElement("canvas");
 woolCanvas.width=14;
 woolCanvas.height=18;
 colorContext = colorCanvas.getContext('2d');
+var useCanvas = false;
 
 
 function getBase64Image(img) {
@@ -204,8 +205,13 @@ var initThreeJs = function(container){
 
 	var _canvas= document.createElement("canvas");
 	var gl = _canvas.getContext("webgl");
-	if(Modernizr.webgl && gl){
+	 useCanvas =Modernizr.webgl && gl
+	
+	if(uneCanvas){
 		renderer = new THREE.WebGLRenderer();
+		radius = 25;
+		segments = 32;
+		rings = 20;
 	}else{
 		renderer = new THREE.CanvasRenderer();
 	}
