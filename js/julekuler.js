@@ -209,9 +209,9 @@ var initThreeJs = function(container){
 	
 	if(uneCanvas){
 		renderer = new THREE.WebGLRenderer();
-		radius = 25;
-		segments = 32;
-		rings = 20;
+		radius = 50;
+		segments = 10;
+		rings = 7;
 	}else{
 		renderer = new THREE.CanvasRenderer();
 	}
