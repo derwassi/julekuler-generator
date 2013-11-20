@@ -197,7 +197,14 @@ var initThreeJs = function(container){
 	// - assume we've got jQuery to hand
 	// create a WebGL renderer, camera
 	// and a scene
-	if(Modernizr.webgl){
+	//checkfor webgl
+	if(!Modernizr.canvas){
+		return;
+	}
+
+	var _canvas= document.createElement("canvas");
+	var gl = _canvas.getContext("webgl");
+	if(Modernizr.webgl && gl){
 		renderer = new THREE.WebGLRenderer();
 	}else{
 		renderer = new THREE.CanvasRenderer();
