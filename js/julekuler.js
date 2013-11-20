@@ -511,6 +511,7 @@ var loadPattern = function(patternstring){
 		if(parameter.length==2){
 			if(parameter[0]=='colors'){
 				//try old encoding
+				colors = null;
 				try{
 				colors = JSON.parse(parameter[1]);
 				}catch(e){}
