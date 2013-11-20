@@ -197,7 +197,11 @@ var initThreeJs = function(container){
 	// - assume we've got jQuery to hand
 	// create a WebGL renderer, camera
 	// and a scene
-	renderer = new THREE.WebGLRenderer();
+	if(Modernizr.webgl){
+		renderer = new THREE.WebGLRenderer();
+	}else{
+		renderer = new THREE.CanvasRenderer();
+	}
 	camera = new THREE.PerspectiveCamera(
 		VIEW_ANGLE,
 		ASPECT,
@@ -274,13 +278,14 @@ var addJulekuler = function(config){
 };
 
 var traverseDrawingSurface = function(centerWidth, centerHeight, drawFunc){
-	var drawTriangle = function(baseline, lineHeight,drawFunc){
+	var drawTriangle = function(baseline, lineHeight,drawFunc, rev){
 		var line = 0;
 		var items = 2;
 		var curLineHeight = 0;
 		var indent = baseline/2-items/2;
 		while(items<baseline){
-			for(var i=0;i<items;i++){
+			//hack for first and last rows!
+			for(var i=0-((rev&&items==2)?1:0);i<items+((!rev && items==2)?1:0);i++){
 				drawFunc(line,i+indent);
 			}
 			line++;
@@ -303,13 +308,13 @@ var traverseDrawingSurface = function(centerWidth, centerHeight, drawFunc){
 	for(var i=0;i<4;i++){
 		drawTriangle(centerWidth,2,function(row,col){
 			drawFunc(row,i*centerWidth+col);
-		});
+		},true);
 		drawRectangle(centerWidth,centerHeight,function(row,col){
 			drawFunc(row+centerWidth-2,i*centerWidth+col);
 		});
 		drawTriangle(centerWidth,2,function(row,col){
 			drawFunc(2*(centerWidth-2)+centerHeight-row-1,i*centerWidth+col);
-		});
+		},false);
 	}
 	
 };
@@ -472,6 +477,7 @@ var createColorPicker=function(colors){
 
 var loadPattern = function(patternstring){
 	patternstring = patternstring.split(';');
+
 	var data = '';
 	for(var index in patternstring){
 		var parameter = patternstring[index].split('=');
@@ -495,21 +501,35 @@ var loadPattern = function(patternstring){
 
 	var i=0;
 	var bin=0;
-	traverseDrawingSurface(16,13,function(row,col){
-			var $el = $('#pixel-'+row+'-'+col);
+	console.log(data.length);
+	//TODO: bad hack... remove in later versions
+	oldFormat = false;
+	if(data.length==864){
+		oldFormat = true;
+	}
+	if(data){
+		traverseDrawingSurface(16,13,function(row,col){
+				var $el = $('#pixel-'+row+'-'+col);
 
-			var bin = decode6BitToChar(data.charAt(Math.floor(i/2)));		
-			if(i%2==1){
-				bin = bin>>3//last three bit
-			}else{
-				bin = bin&7;//first three bit
-			}
-			i++;
-			$el.attr('data-color',bin);
-			$el.css('background-color',colors[bin]);
+				var bin = decode6BitToChar(data.charAt(Math.floor(i/2)));			
+				if(i%2==1){
+					bin = bin>>3//last three bit
+				}else{
+					bin = bin&7;//first three bit
+				}
+
+				i++;
+//TODO: bad hack for old format
+				if(oldFormat && (row<=1 || row>=39) && (col==9 || col==6 || col==25 || col==41 || col==57|| col==22 || col==38|| col==54)){
+	i--;
+	console.log(row,col);
+}
+				$el.attr('data-color',bin);
+				$el.css('background-color',colors[bin]);
 			
 		
-	});
+		});
+	}
 	redraw();
 	//if(texture1) texture1.needsUpdate = true;
 	
