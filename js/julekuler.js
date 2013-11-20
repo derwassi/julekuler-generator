@@ -207,7 +207,7 @@ var initThreeJs = function(container){
 	var gl = _canvas.getContext("webgl");
 	 useCanvas =Modernizr.webgl && gl
 	
-	if(uneCanvas){
+	if(useCanvas){
 		renderer = new THREE.WebGLRenderer();
 		
 	}else{
@@ -454,10 +454,22 @@ julekuler.saveState = function(){
 		
 	});
 	console.log(res);
-	var json = JSON.stringify({colors:colors,pattern:s});
-	$('#load-save').val(json);	
+	
+	//var json = JSON.stringify({colors:colors,pattern:s});
+	//new encoding:
+	var first = true;
+	var colstring = '';
+	for(var _col in colors){
+		if(!first){
+			colstring += '/';			
+		}		
+		colstring += _col +":"+colors[_col];
+
+		first = false;
+	}
+	//$('#load-save').val(json);	
 	document.title = $('#title').val() + " - Julekuler generator";
-	window.location.hash = '#colors='+JSON.stringify(colors)+';title='+$('#title').val()+';data=' + res;
+	window.location.hash = '#colors='+colstring+';title='+$('#title').val()+';data=' + res;
 }
 
 var createColorPicker=function(colors){
@@ -498,8 +510,19 @@ var loadPattern = function(patternstring){
 		//console.log(parameter);
 		if(parameter.length==2){
 			if(parameter[0]=='colors'){
+				//try old encoding
+				try{
 				colors = JSON.parse(parameter[1]);
-
+				}catch(e){}
+				//new encoding
+				if(!colors){
+					colors = {};
+					var cols = parameter[1].split('/')
+					for(var col in cols){
+						var _tmp = cols[col].split(':');
+						colors[_tmp[0]] = _tmp[1];
+					}
+				}
 				createColorPicker(colors);			
 			}
 			if(parameter[0]=='title'){
