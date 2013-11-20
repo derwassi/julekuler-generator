@@ -469,7 +469,7 @@ julekuler.saveState = function(){
 	}
 	//$('#load-save').val(json);	
 	document.title = $('#title').val() + " - Julekuler generator";
-	window.location.hash = '#colors='+colstring+';title='+$('#title').val()+';data=' + res;
+	window.location.hash = '#' + encodeURIComponent('colors='+colstring+';title='+$('#title').val()+';data=' + res);
 }
 
 var createColorPicker=function(colors){
