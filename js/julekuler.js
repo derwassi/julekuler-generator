@@ -212,8 +212,8 @@ var initThreeJs = function(container){
 		
 	}else{
 		radius = 50;
-		segments = 10;
-		rings = 7;
+		segments = 20;
+		rings = 14;
 		renderer = new THREE.CanvasRenderer();
 	}
 	camera = new THREE.PerspectiveCamera(
