@@ -21,7 +21,9 @@ var colors = {
 	4 : '#26436E',
 	5: '#021530'
 };
-var encodeMap = {0:"-",
+
+//DONE: moved to angular
+/*var encodeMap = {0:"-",
 1:".",
 2:"/",
 3:"0",
@@ -150,7 +152,7 @@ var decodeMap = {"-":0,
 "x":61,
 "y":62,
 "z":63
-}
+}*/
 
 
 var renderer;
@@ -431,8 +433,8 @@ var updateColors = function(){
 	julekulerTexture.needsUpdate=true;
 	
 }
-
-julekuler.saveState = function(){
+//DONE: moved to angular
+/*julekuler.saveState = function(){
 	var s = {};
 	var i=0;
 	var bin = 0;
@@ -470,7 +472,8 @@ julekuler.saveState = function(){
 	//$('#load-save').val(json);	
 	document.title = $('#title').val() + " - Julekuler generator";
 	window.location.hash = '#' + encodeURIComponent('colors='+colstring+';title='+$('#title').val()+';data=' + res);
-}
+}*/
+
 
 var createColorPicker=function(colors){
 	$('#colors').empty();
@@ -501,7 +504,8 @@ var createColorPicker=function(colors){
 	});
 };
 
-var loadPattern = function(patternstring){
+//done in angular
+/*var loadPattern = function(patternstring){
 	patternstring = patternstring.split(';');
 
 	var data = '';
@@ -571,35 +575,16 @@ var loadPattern = function(patternstring){
 	redraw();
 	//if(texture1) texture1.needsUpdate = true;
 	
-};
+};*/
 
-var createBookmarkLink=function() {
-    var title = document.title;
-    var url = document.location.href;
- 
-    if(window.sidebar && window.sidebar.addPanel){
-        /* Mozilla Firefox Bookmark */
-        window.sidebar.addPanel(title, url, "");
-    }else if(window.external && window.external.AddFavorite){
-        /* IE Favorite */
-        window.external.AddFavorite(url, title);
-    }else if(window.opera && window.print) {
-        /* Opera Hotlist */
-        alert("Press Control + D to bookmark");
-        return true;
-    }else{
-        /* Other */
-        alert("Press Control + D to bookmark");
-    }
-    return false;
-}
 
-var encode6BitToChar = function(bin){
+//DONE: ported to angular
+/*var encode6BitToChar = function(bin){
 	return encodeMap[bin];
 }
 var decode6BitToChar = function(bin){
 	return decodeMap[bin];
-}
+}*/
 
 
 var addEvents = function(){
