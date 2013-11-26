@@ -1,7 +1,7 @@
 /**
  * Created by wassi on 26.11.13.
  */
-angular.module('kpg.services', []).
+angular.module('kpg.service.model.model', []).
     factory('modelService',function(){
         var pattern = {}
         return {
@@ -27,7 +27,9 @@ angular.module('kpg.services', []).
                     }
                     pattern[row][col] = c;
                 }
+
             },
+
             patternConfig: {},
             title:{}
         };

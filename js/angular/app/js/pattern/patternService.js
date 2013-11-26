@@ -2,12 +2,12 @@
  * Created by wassi on 26.11.13.
  */
 
-angular.module('kpg.pattern.service.pattern', [])
+angular.module('kpg.service.pattern.pattern', [])
     .factory('traversePatternFactory', function () {
         var defaults = {
-            centerWidth:16,
-            centerHeight:13,
-            lineHeight:2
+            centerWidth: 16,
+            centerHeight: 13,
+            lineHeight: 2
 
         };
 
@@ -40,7 +40,7 @@ angular.module('kpg.pattern.service.pattern', [])
             }
         };
 
-        var drawPattern = function(config){
+        var drawPattern = function (config) {
             for (var i = 0; i < 4; i++) {
                 drawTriangle(config.centerWidth, config.lineHeight, function (row, col) {
                     drawFunc(row, i * config.centerWidth + col);
@@ -52,21 +52,71 @@ angular.module('kpg.pattern.service.pattern', [])
                     drawFunc(2 * (config.centerWidth - 2) + config.centerHeight - row - 1, i * config.centerWidth + col);
                 }, false);
             }
-        }
+        };
 
-        var isInPattern = function(config,row,col){
-            return true; //TODO: implement
-        }
-        return function(config){
-            angular.extend(config,defaults);
-            return {
-                traversePattern:function(drawFunc){
-                    drawPattern(config);
-                },
-                isInPattern:function(row,col){
-                    return isInPattern(config,row,col);
+        var copyOver = function (config, from, to, drawFunc) {
+            drawPattern(function (row, col) {
+                if (col >= from * config.centerWidth && col < (from + 1) * config.centerWidth) {
+                    var val = parseInt($('#pixel-' + row + '-' + col).attr('data-color'));
+                    var $el = $('#pixel-' + row + '-' + (col - (copy[0] * centerWidth) + (copy[1] * centerWidth)));
+                    $el.attr('data-color', val);
+                    $el.css('background-color', colors[val]);
                 }
-            }
+            });
+        };
+
+        var isInPattern = function (config, row, col, drawFunc) {
+            return true; //TODO: implement
+        };
+        return function (config) {
+            angular.extend(config, defaults);
+            return {
+                /**
+                 * traverses the pattern
+                 * @param drawFunc
+                 */
+                traversePattern: function (drawFunc) {
+                    drawPattern(config, drawFunc);
+                },
+                /**
+                 * checks if a given coord is within the pattern
+                 * @param row
+                 * @param col
+                 * @param drawFunc
+                 * @returns {*}
+                 */
+                isInPattern: function (row, col, drawFunc) {
+                    return isInPattern(config, row, col, drawFunc);
+                },
+                /**
+                 * copies symmetric parts of the pattern into each others
+                 * @param from
+                 * @param to
+                 * @param patternModel
+                 */
+                copyOver: function (from, to, patternModel) {
+                    drawPattern(config, function (row, col, config) {
+                        if (col >= from * centerWidth && col < (from + 1) * centerWidth) {
+                            var val = patternModel.getColorAt(row, col);
+                            patternModel.setColorAt(row, (col + ((to < from ? to + 4 : to) - from) * centerWidth) % (4 * centerWidth));
+                        }
+                    });
+                },
+                /**
+                 * eturns a list of symmetry points for a given point
+                 * @param row
+                 * @param col
+                 * @returns {Array}
+                 */
+                getSymmetricPoints: function (row, col) {
+                    var res = [];
+                    for (var i = 1; i < 4; i++) {
+                        res[i - 1] = {row: row, col: (col + i * config.centerWidth) % (4 * centerWidth)};
+                    }
+                    return res;
+                }
+
+            };
         }
-    })
+    });
 
