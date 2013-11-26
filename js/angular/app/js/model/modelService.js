@@ -3,6 +3,7 @@
  */
 angular.module('kpg.services', []).
     factory('modelService',function(){
+        var pattern = {}
         return {
             colors:{0:'white',
                 1: '#D13535',
@@ -10,7 +11,23 @@ angular.module('kpg.services', []).
                 3: '#98BABD',
                 4 : '#26436E',
                 5: '#021530'},
-            pattern:{},
+            pattern: {
+                getColorAt:function(row,col){
+                    if(typeof pattern[row] === 'undefined'){
+                        pattern[row] = {};
+                    }
+                    if(typeof pattern[row][col] === 'undefined'){
+                        pattern[row][col] = 0
+                    }
+                    return pattern[row][col];
+                },
+                setColorAt:function(row,col,c){
+                    if(typeof pattern[row] === 'undefined'){
+                        pattern[row] = {};
+                    }
+                    pattern[row][col] = c;
+                }
+            },
             patternConfig: {},
             title:{}
         };

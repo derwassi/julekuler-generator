@@ -5,7 +5,7 @@
 
 // Demonstrate how to register services
 // In this case it is a simple value service.
-angular.module('kpg.services', [])
+angular.module('kpg.persist.services.pesristence', [])
     .factory('bookmarkService',function(){
         return {
             bookmark: function () {
