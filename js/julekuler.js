@@ -13,14 +13,14 @@ FAR = 10000;
 var radius = 50,
     segments = 64,
     rings = 41;
-var colors = {
+/*var colors = {
 	0:'white',
 	1: '#D13535',
 	2: '#580F0F',
 	3: '#98BABD',
 	4 : '#26436E',
 	5: '#021530'
-};
+};*/
 
 //DONE: moved to angular
 /*var encodeMap = {0:"-",
@@ -175,8 +175,8 @@ woolCanvas.height=18;
 colorContext = colorCanvas.getContext('2d');
 var useCanvas = false;
 
-
-function getBase64Image(img) {
+//DONE: nicht mehr benötigt
+/*function getBase64Image(img) {
     // Create an empty canvas element
     var canvas = document.createElement("canvas");
     canvas.width = img.width;
@@ -193,8 +193,10 @@ function getBase64Image(img) {
     var dataURL = canvas.toDataURL("image/png");
 
     return dataURL;
-}
+}*/
 
+//DONE: in angular
+    /*
 var initThreeJs = function(container){
 	// get the DOM element to attach to
 	// - assume we've got jQuery to hand
@@ -257,16 +259,17 @@ var initThreeJs = function(container){
 	pointLight.position.x = 10;
 	pointLight.position.y = 50;
 	pointLight.position.z = -130;
-	scene.add(pointLight);*/
+	scene.add(pointLight);
 	var ambientLight = new THREE.AmbientLight(0xffffff);
 	scene.add(ambientLight);
-	/*var directionalLight = new THREE.DirectionalLight(0xffffff);
+	var directionalLight = new THREE.DirectionalLight(0xffffff);
 	directionalLight.position.set(1, 1, 1).normalize();
-	scene.add(directionalLight);*/
+	scene.add(directionalLight);
 	renderer.render(scene, camera);
-};
+};*/
 
-var addJulekuler = function(config){
+    //DONE: in angular
+/*var addJulekuler = function(config){
 	canvas = $('#texture')[0]
 	context = canvas.getContext("2d");
 	canvasStretched = $('#texture-stretched')[0]
@@ -291,7 +294,7 @@ var addJulekuler = function(config){
 
 	// add to the scene
 	
-};
+};*/
 
 var traverseDrawingSurface = function(centerWidth, centerHeight, drawFunc){
 	var drawTriangle = function(baseline, lineHeight,drawFunc, rev){
@@ -335,7 +338,8 @@ var traverseDrawingSurface = function(centerWidth, centerHeight, drawFunc){
 	
 };
 
-var createJulekulerCanvas = function(config){
+//DONE added to angular
+/*var createJulekulerCanvas = function(config){
 	var a = config.sideLength;//TODO: config
 
 	traverseDrawingSurface(config.centerWidth,config.centerHeight,function(row,col){
@@ -348,9 +352,11 @@ var createJulekulerCanvas = function(config){
 			.attr('id','pixel-'+row+'-'+col));
 
 	});
-};
+};*/
 
-var redraw = function(config){
+
+    //DONE: in angular
+/*var redraw = function(config){
 	var a = 10;
 	
 	context.fillStyle='#aaa';
@@ -406,18 +412,20 @@ context.drawImage(colorCanvas,0,0,14,18,a*col,a*row-4,10,18);
 	scene.needsUpdate=true;
 	
 	
-};
+};*/
 
+//DONE in angular
 //Function to convert hex format to a rgb color
-var rgb2hex=function(rgb){
+/*var rgb2hex=function(rgb){
  rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
  return "#" +
   ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
   ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
   ("0" + parseInt(rgb[3],10).toString(16)).slice(-2);
-}
+}*/
 
-var updateColors = function(){
+    //DONE in angular
+/*var updateColors = function(){
 	colors=[];
 	
 	$.each(	$("#colors > div"), function(idx, el){
@@ -432,7 +440,7 @@ var updateColors = function(){
 	});
 	julekulerTexture.needsUpdate=true;
 	
-}
+}*/
 //DONE: moved to angular
 /*julekuler.saveState = function(){
 	var s = {};
@@ -474,8 +482,8 @@ var updateColors = function(){
 	window.location.hash = '#' + encodeURIComponent('colors='+colstring+';title='+$('#title').val()+';data=' + res);
 }*/
 
-
-var createColorPicker=function(colors){
+//DONE in angular
+/*var createColorPicker=function(colors){
 	$('#colors').empty();
 	var i=0;
 	for(var color in colors){
@@ -502,7 +510,7 @@ var createColorPicker=function(colors){
 		});
 
 	});
-};
+};*/
 
 //done in angular
 /*var loadPattern = function(patternstring){
@@ -592,8 +600,8 @@ var addEvents = function(){
 	
 
 	
-
-	
+//moved to angular
+	/*
 	$("#drawing >div").click(function(el){
 		$el = $(el.target);
 		var c = parseInt($el.attr('data-color'));
@@ -615,8 +623,9 @@ var addEvents = function(){
 		}
 		return false;
 		
-	});
-	$("#load").click(function(){
+	});*/
+    //DONE: NOT NEEDED
+	/*$("#load").click(function(){
 		loadPattern($('#load-save').val());
 
 		return false;
@@ -626,8 +635,10 @@ var addEvents = function(){
 		julekuler.saveState();
 		return createBookmarkLink();
 
-	});
-	$("#copyover").change(function(){
+	});*/
+
+    //DONE: in angular
+	/*$("#copyover").change(function(){
 		console.log($(this).val());
 		$.each($(this).val().split('|'),function(k,v){
 			var copy=v.split('-');
@@ -646,14 +657,15 @@ var addEvents = function(){
 		$(this).val("");
 		redraw();
 		texture1.needsUpdate = true;
-	});
-	$("#update-3d-view").click(function(){
+	});*/
+    //DONE not needed
+	/*$("#update-3d-view").click(function(){
 		redraw();
 		texture1.needsUpdate = true;
 		return false;
 
-	});
-	$("#save-to-image").click(function(){
+	});*/
+	/*$("#save-to-image").click(function(){
 		var exportCanvas = $('#export-image')[0];
 		var exportContext = exportCanvas.getContext('2d');
 		exportContext.strokeStyle = "#000";
@@ -699,22 +711,23 @@ var addEvents = function(){
 			});
 		Canvas2Image.saveAsPNG(exportCanvas);
 		return false;
-	});
+	});*/
 }
 
-
-var loadFromUrl = function(){
+//done in angular
+/*var loadFromUrl = function(){
 	var hash=window.location.hash;
 	if(hash.length>0) hash = hash.substr(1);
 	loadPattern(decodeURIComponent(hash));
-}
+}*/
 
 
 
 /**
 * For controls
 */
-var animateThreeJs = function(){
+   //DONE in angular
+/*var animateThreeJs = function(){
 
     // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
     requestAnimationFrame(animateThreeJs);
@@ -722,10 +735,10 @@ var animateThreeJs = function(){
     // Render the scene.
     renderer.render(scene, camera);
     controls.update();
-}
+}*/
 
-
-julekuler.start = function(config){
+//DONE in angular
+/*julekuler.start = function(config){
 //TODO config
 	
 	initThreeJs($('#container'));
@@ -739,7 +752,7 @@ julekuler.start = function(config){
 	loadFromUrl();
 	redraw();
 	//texture1.needsUpdate = true;
-};
+};*/
 
 
 julekuler.start({julekulerCanvas:{centerWidth:16,centerHeight:13,sideLength:10}});

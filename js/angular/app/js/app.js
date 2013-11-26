@@ -15,3 +15,26 @@ angular.module('kpg', [
   $routeProvider.when('/view2', {templateUrl: 'partials/partial2.html', controller: 'MyCtrl2'});
   $routeProvider.otherwise({redirectTo: '/view1'});
 }]);*/
+
+var loadFromUrl = function(){
+    var hash=window.location.hash;
+    if(hash.length>0) hash = hash.substr(1);
+    loadPattern(decodeURIComponent(hash));
+
+}
+
+julekuler.start = function(config){
+//TODO config
+
+    initThreeJs($('#container'));
+    addJulekuler(config.julekuler);
+    animateThreeJs();
+    requestAnimationFrame(animateThreeJs);
+    createJulekulerCanvas(config.julekulerCanvas);
+    createColorPicker(colors);
+
+    addEvents();
+    loadFromUrl();
+    redraw();
+    //texture1.needsUpdate = true;
+};
