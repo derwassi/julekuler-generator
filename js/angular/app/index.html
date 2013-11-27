@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="en" ng-app="myApp">
+<html lang="en" ng-app="kpg">
 <head>
   <meta charset="utf-8">
-  <title>My AngularJS App</title>
-  <link rel="stylesheet" href="css/app.css"/>
+  <title></title>
+    <link rel="stylesheet" href="css/app.css"/>
+    <link rel="stylesheet" href="../../../css/julekuler.css"/>
 </head>
 <body>
   <ul class="menu">
@@ -11,19 +12,25 @@
     <li><a href="#/view2">view2</a></li>
   </ul>
 
-  <div ng-view></div>
+  <div ng-controller="canvasHtml">
+      <div id="drawing"   kpg-canvas-html elem-width="10"></div>
 
-  <div>Angular seed app: v<span app-version></span></div>
+  </div>
+
 
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
   -->
   <script src="lib/angular/angular.js"></script>
   <script src="lib/angular/angular-route.js"></script>
+
+
+  <script src="js/canvas/htmlDirective.js"></script>
+
+  <script src="js/model/modelService.js"></script>
+
+  <script src="js/pattern/patternService.js"></script>
+  <script src="js/canvas/htmlCanvasController.js"></script>
   <script src="js/app.js"></script>
-  <script src="js/persist/urlServices.js"></script>
-  <script src="js/controllers.js"></script>
-  <script src="js/filters.js"></script>
-  <script src="js/directives.js"></script>
 </body>
 </html>

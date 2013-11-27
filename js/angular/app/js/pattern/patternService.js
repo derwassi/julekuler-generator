@@ -40,7 +40,7 @@ angular.module('kpg.service.pattern.pattern', [])
             }
         };
 
-        var drawPattern = function (config) {
+        var drawPattern = function (config, drawFunc) {
             for (var i = 0; i < 4; i++) {
                 drawTriangle(config.centerWidth, config.lineHeight, function (row, col) {
                     drawFunc(row, i * config.centerWidth + col);
@@ -55,7 +55,7 @@ angular.module('kpg.service.pattern.pattern', [])
         };
 
         var copyOver = function (config, from, to, drawFunc) {
-            drawPattern(function (row, col) {
+            drawPattern(config,function (row, col) {
                 if (col >= from * config.centerWidth && col < (from + 1) * config.centerWidth) {
                     var val = parseInt($('#pixel-' + row + '-' + col).attr('data-color'));
                     var $el = $('#pixel-' + row + '-' + (col - (copy[0] * centerWidth) + (copy[1] * centerWidth)));
@@ -115,6 +115,8 @@ angular.module('kpg.service.pattern.pattern', [])
                     }
                     return res;
                 }
+
+
 
             };
         }

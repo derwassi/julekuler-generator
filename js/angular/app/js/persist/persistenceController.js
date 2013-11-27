@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-angular.module('kpg.controllers', []).
+angular.module('kpg.controller.canvas.html', []).
     controller('Persistence', ['$scope',
         '$location',
         'titleCodecService',

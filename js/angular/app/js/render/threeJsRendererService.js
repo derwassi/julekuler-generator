@@ -1,7 +1,7 @@
 /**
  * Created by wassi on 26.11.13.
  */
-angular.module('kpg.services', [])
+angular.module('kpg.service.render.threejs', [])
     .factory('buildStuff', function () {
 
 

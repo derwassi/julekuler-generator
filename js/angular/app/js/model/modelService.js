@@ -4,6 +4,7 @@
 angular.module('kpg.service.model.model', []).
     factory('modelService',function(){
         var pattern = {};
+
         var colors = {0:'white',
             1: '#D13535',
             2: '#580F0F',
@@ -11,9 +12,27 @@ angular.module('kpg.service.model.model', []).
             4 : '#26436E',
             5: '#021530'};
         var listeners = {};
-        var colorListeners = {};
+        var colorListeners = [];
         return {
-            colors:colors,
+            colors:{
+                getColor:function(color){
+                    return colors[color];
+                 },
+                addListener:function(listener){
+                    colorListeners.push(listener);
+
+                },
+                setColor:function(color,col){
+                    colors[color] = col;
+                    for(var l in colorListeners){
+                        colorListeners[l](color);
+                    }
+                }
+            },
+
+            currentColor:0,
+            symmetricEditing: false,
+
             pattern: {
                 /**
                  * returns the color at a specific point
@@ -46,7 +65,7 @@ angular.module('kpg.service.model.model', []).
                         pattern[row][col] = c;
                         if(listeners[row] && listeners[row][col]){
                             for(var l in listeners[row][col]){
-                                listeners[l](row,col,oldCol,c);
+                                listeners[row][col][l](row,col,oldCol,c);
                             }
                         }
                         return true;
@@ -65,7 +84,7 @@ angular.module('kpg.service.model.model', []).
                     if(typeof listeners[row] === 'undefined'){
                         listeners[row] = {};
                     }
-                    if(typeof pattern[row][col] === 'undefined'){
+                    if(typeof listeners[row][col] === 'undefined'){
                         listeners[row][col] = [];
                     }
                     listeners[row][col].push(listener);
