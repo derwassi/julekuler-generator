@@ -12,7 +12,9 @@ angular.module('kpg', [
     'kpg.service.model.model',
     'kpg.directive.canvas.colorpicker',
   'kpg.directive.canvas.html',
-  'kpg.controller.canvas.html'
+  'kpg.controller.canvas.html',
+    'kpg.controller.actions.actions',
+    'kpg.directive.actions.symmetricCopy'
 ]);
 /*config(['$routeProvider', function($routeProvider) {
   $routeProvider.always({templateUrl: 'partials/content'})

@@ -69,7 +69,7 @@ angular.module('kpg.service.pattern.pattern', [])
             return true; //TODO: implement
         };
         return function (config) {
-            angular.extend(config, defaults);
+            config = angular.extend(config, defaults);
             return {
                 /**
                  * traverses the pattern
@@ -95,10 +95,11 @@ angular.module('kpg.service.pattern.pattern', [])
                  * @param patternModel
                  */
                 copyOver: function (from, to, patternModel) {
-                    drawPattern(config, function (row, col, config) {
-                        if (col >= from * centerWidth && col < (from + 1) * centerWidth) {
+                    drawPattern(config, function (row, col) {
+                        if (col >= from * config.centerWidth && col < (from + 1) * config.centerWidth) {
                             var val = patternModel.getColorAt(row, col);
-                            patternModel.setColorAt(row, (col + ((to < from ? to + 4 : to) - from) * centerWidth) % (4 * centerWidth));
+                            var newCol = (col + ((to < from ? to + 4 : to) - from) * config.centerWidth) % (4 * config.centerWidth);
+                            patternModel.setColorAt(row, newCol,val);
                         }
                     });
                 },
@@ -114,6 +115,9 @@ angular.module('kpg.service.pattern.pattern', [])
                         res[i - 1] = {row: row, col: (col + i * config.centerWidth) % (4 * centerWidth)};
                     }
                     return res;
+                },
+                getNumberOfSymmetricAreas:function(){
+                    return 4;
                 }
 
 
