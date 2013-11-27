@@ -10,7 +10,7 @@ angular.module('kpg', [
     //'kpg.service.persist.image',
     //'kpg.service.persist.url',
     'kpg.service.model.model',
-
+    'kpg.directive.canvas.colorpicker',
   'kpg.directive.canvas.html',
   'kpg.controller.canvas.html'
 ]);

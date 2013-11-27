@@ -27,6 +27,9 @@ angular.module('kpg.service.model.model', []).
                     for(var l in colorListeners){
                         colorListeners[l](color);
                     }
+                },
+                getColors:function(){
+                    return colors;
                 }
             },
 
