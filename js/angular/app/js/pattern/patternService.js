@@ -99,7 +99,7 @@ angular.module('kpg.service.pattern.pattern', [])
                         if (col >= from * config.centerWidth && col < (from + 1) * config.centerWidth) {
                             var val = patternModel.getColorAt(row, col);
                             var newCol = (col + ((to < from ? to + 4 : to) - from) * config.centerWidth) % (4 * config.centerWidth);
-                            patternModel.setColorAt(row, newCol,val);
+                            patternModel.setColorAt(row, newCol,''+val);
                         }
                     });
                 },
