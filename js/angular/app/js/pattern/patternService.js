@@ -112,7 +112,7 @@ angular.module('kpg.service.pattern.pattern', [])
                 getSymmetricPoints: function (row, col) {
                     var res = [];
                     for (var i = 1; i < 4; i++) {
-                        res[i - 1] = {row: row, col: (col + i * config.centerWidth) % (4 * centerWidth)};
+                        res[i - 1] = {row: row, col: (col + i * config.centerWidth) % (4 * config.centerWidth)};
                     }
                     return res;
                 },

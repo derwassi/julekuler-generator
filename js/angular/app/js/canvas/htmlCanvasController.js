@@ -24,9 +24,9 @@ angular.module('kpg.controller.canvas.html',[])
             }
             modelService.pattern.setColorAt(row,col,color);
             if(modelService.symmetricEditing){
-                var sp = patternService.getSymmetricPoints(row,col);
+                var sp = $scope.patternService.getSymmetricPoints(row,col);
                 for(var p in sp){
-                    modelService.patternService.setColorAt(p.row, p.col,color);
+                    modelService.pattern.setColorAt(sp[p].row, sp[p].col,color);
                 }
             }
         };
