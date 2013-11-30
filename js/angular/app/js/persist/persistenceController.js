@@ -2,47 +2,62 @@
 
 /* Controllers */
 
-angular.module('kpg.controller.canvas.html', []).
-    controller('Persistence', ['$scope',
+angular.module('kpg.controller.persist.persist', []).
+    controller('kpgPersist', ['$scope',
         '$location',
         'titleCodecService',
         'patternCodecService',
         'colorCodecService',
-        'bookmarkService', function ($scope, $location, titleCodecService, patternCodecService, colorCodecService,bookmarkService) {
-
+        'modelService',
+        'bookmarkService',
+        'traversePatternFactory',
+        'imageService'
+        , function ($scope, $location, titleCodecService, patternCodecService, colorCodecService, modelService, bookmarkService, traversePatternFactory,imageService) {
+            var patternService = traversePatternFactory({});
+            console.log(titleCodecService);
             var allProperties = {'title': titleCodecService, 'pattern': patternCodecService, 'color': colorCodecService};
             //TODO: get urls and add replacement
 
-            var socialStuff = {'twitter': '', 'gplus': '', 'facebook': ''};
+            var socialStuff = {'twitter': '',
+                'gplus': '',
+                'facebook': ''};
 
             //store data in url
             var saveToUrl = function () {
-                allProperties.forEach(function (k) {
-                    $location.search(k, codec.encode($scope.model[k]));
+                angular.forEach(allProperties, function (codec, k) {
+
+                    console.log(codec, k);
+                    $location.search(k, codec.encode(patternService.traversePattern, modelService));
                 });
             };
 
 
+            $scope.model = modelService;
 
             /**
              * loads from URL
              */
             $scope.loadStateFromUrl = function () {
                 var savedState = $location.search();
-                allProperties.forEach(function (k, codec) {
+                angular.forEach(allProperties, function (codec, k) {
                     if (typeof savedState[k] !== 'undefined') {
-                        $scope.model[k] = codec.decode(savedState[k]);
-                    } else {
-                        $scope.model[k] = defaultValues[k];
+
+                        codec.decode(savedState[k], patternService.traversePattern, modelService);
+
                     }
                 });
             };
 
+            $scope.loadStateFromUrl();
             /**
              * saves state to url
              */
             $scope.saveStateToUrl = function () {
                 saveToUrl();
+            };
+
+            $scope.saveStateToImage=function(){
+                imageService.download(modelService,patternService,{});
             };
 
             /**
@@ -52,7 +67,7 @@ angular.module('kpg.controller.canvas.html', []).
             $scope.bookmark = function (mode) {
                 saveToUrl();
                 if (mode == 'local') {
-                   bookmarkService.bookmark();
+                    bookmarkService.bookmark();
                 } else {
                     if (typeof socialStuff[mode] !== 'undefined') {
                         var url = socialStuff[mode];

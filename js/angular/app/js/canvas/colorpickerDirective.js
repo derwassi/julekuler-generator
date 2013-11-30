@@ -26,10 +26,16 @@ angular.module('kpg.directive.canvas.colorpicker', [])
                     $selector.ColorPicker({
                         flat: false,
                         color: color,
-                        onSubmit: function (hsb, hex, rgb) {
+                        onSubmit: function (hsb, hex) {
                             $picker.css('background-color', '#' + hex);
                             //TODO: set via event + controller
                             model.colors.setColor(index, '#' + hex);
+                        }
+                    });
+                    model.colors.addListener(function(color){
+                        if(color==""+index){
+                            $picker.css('background-color', colors.getColor(color));
+                            $selector.ColorPickerSetColor(colors.getColor(color));
                         }
                     });
 
@@ -49,7 +55,7 @@ angular.module('kpg.directive.canvas.colorpicker', [])
 
         return{
             //TODO: fetch services from attributes
-            link: function ($scope, element, attrs) {
+            link: function ($scope, element) {
                 scope = $scope;
                 createColorPicker(element, $scope.modelService);
             }

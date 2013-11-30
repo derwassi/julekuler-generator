@@ -44,10 +44,10 @@ angular.module('kpg.service.model.model', []).
                  * @returns {*}
                  */
                 getColorAt:function(row,col){
-                    if(typeof pattern[row] === 'undefined'){
+                    if(typeof pattern[row] == 'undefined'){
                         pattern[row] = {};
                     }
-                    if(typeof pattern[row][col] === 'undefined'){
+                    if(typeof pattern[row][col] == 'undefined'){
                         pattern[row][col] = 0
                     }
                     return pattern[row][col];
@@ -60,7 +60,7 @@ angular.module('kpg.service.model.model', []).
                  * @returns {boolean}
                  */
                 setColorAt:function(row,col,c){
-                    if(typeof pattern[row] === 'undefined'){
+                    if(typeof pattern[row] == 'undefined'){
                         pattern[row] = {};
                     }
                     if(pattern[row][col] != c){
@@ -92,17 +92,12 @@ angular.module('kpg.service.model.model', []).
                     }
                     listeners[row][col].push(listener);
                 },
-                addColorListener:function(col,listener){
-                    if(typeof colors[col] === 'undefined'){
-                        colors[col] = [];
-                    }
-                    colors[col].push(listener);
-                }
+
 
 
             },
 
             patternConfig: {},
-            title:{}
+            title:''
         };
     });

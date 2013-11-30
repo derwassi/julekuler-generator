@@ -2,7 +2,7 @@ angular.module('kpg.directive.canvas.html', [])
     .directive('kpgCanvasHtml', function () {
         var defaults = {
             elemWidth: 10
-        }
+        };
         var scope = null;
         var createCanvas = function (element, patternService, modelService, config) {
             angular.extend(config, defaults);
@@ -25,7 +25,7 @@ angular.module('kpg.directive.canvas.html', [])
                     el.css('background-color', modelService.colors.getColor(color));
                 });
                 modelService.colors.addListener(function (newColor) {
-                    if (color === newColor) {
+                    if (color == newColor) {
                         el.css('background-color', modelService.colors.getColor(color));
                     }
                 });

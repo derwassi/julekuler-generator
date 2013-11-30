@@ -14,7 +14,14 @@ angular.module('kpg', [
   'kpg.directive.canvas.html',
   'kpg.controller.canvas.html',
     'kpg.controller.actions.actions',
-    'kpg.directive.actions.symmetricCopy'
+    'kpg.directive.actions.symmetricCopy',
+    'kpg.directive.render.threeJs',
+    'kpg.controller.render.threeJs',
+    'kpg.service.persist.url',
+    'kpg.controller.persist.persist',
+    'kpg.service.persist.image'
+
+
 ]);
 /*config(['$routeProvider', function($routeProvider) {
   $routeProvider.always({templateUrl: 'partials/content'})

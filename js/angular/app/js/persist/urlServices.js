@@ -6,7 +6,7 @@
 // Demonstrate how to register services
 // In this case it is a simple value service.
 angular.module('kpg.service.persist.url', [])
-    .factory('bookmarkService',function(){
+    .factory('bookmarkService', function () {
         return {
             bookmark: function () {
                 var title = document.title;
@@ -30,40 +30,45 @@ angular.module('kpg.service.persist.url', [])
             }
         }
     })
-    .factory('titleCodecService',function(){
+    .factory('titleCodecService', function () {
         var p = {};
         /**
          * Encodes an title
-         * @param colors
+         * @param patternService
+         * @param modelService
          * @returns {string}
          */
-        p.encode = function (title) {
-            return title;
+        p.encode = function (patternService,modelService) {
+            return modelService.title;
         };
 
         /**
          * decodes a title
-         * @param colorstring
+         * @param title
+         * @param patternService
+         * @param modelService
          */
-        p.decode = function (title) {
-            return title;
+        p.decode = function (title,patternService,modelService) {
+            modelService.title = title;
         };
+        return p;
     })
     .factory('colorCodecService', function () {
         var p = {};
         /**
          * Encodes an array of colors to a string
-         * @param colors
+         * @param patternService
+         * @param modelService
          * @returns {string}
          */
-        p.encode = function (colors) {
+        p.encode = function (patternService,modelService) {
             var first = true;
             var colstring = '';
-            for (var _col in colors) {
+            for (var _col in modelService.colors.getColors()) {
                 if (!first) {
                     colstring += '/';
                 }
-                colstring += _col + ":" + colors[_col];
+                colstring += _col + ":" + modelService.colors.getColor(_col);
 
                 first = false;
             }
@@ -73,21 +78,24 @@ angular.module('kpg.service.persist.url', [])
         /**
          * decodes a colorstring to an array of collors
          * @param colorstring
+         * @param patternService
+         * @param modelService
          */
-        p.decode = function (colorstring) {
-            var colors = {};
-            //new encoding
+        p.decode = function (colorstring, patternService,modelService) {
+           //new encoding
             var cols = colorstring.split('/');
             for (var col in cols) {
                 var _tmp = cols[col].split(':');
-                colors[_tmp[0]] = _tmp[1];
+
+                modelService.colors.setColor(''+_tmp[0], _tmp[1]);
             }
-            return colors;
+            console.log(modelService.colors.getColors());
         };
+        return p;
 
     })
 
-    .factory('patternCodecService', function (traverseDrawingSurface) {
+    .factory('patternCodecService', function () {
         var p = {};
 
 
@@ -143,7 +151,7 @@ angular.module('kpg.service.persist.url', [])
             61: "x",
             62: "y",
             63: "z"
-        }
+        };
         var decodeMap = {"-": 0,
             ".": 1,
             "/": 2,
@@ -208,28 +216,29 @@ angular.module('kpg.service.persist.url', [])
             "x": 61,
             "y": 62,
             "z": 63
-        }
+        };
         var encode6BitToChar = function (bin) {
             return encodeMap[bin];
-        }
+        };
         var decode6BitToChar = function (bin) {
             return decodeMap[bin];
-        }
+        };
 
         /**
          * encodes a pattern objec
-         * @param data
+         *
          * @param traverseDrawingSurface
+         * @param modelService
          * @returns {string}
          */
-        p.encode = function (data) {
+        p.encode = function (traverseDrawingSurface,modelService) {
             var i = 0;
             var bin = 0;
             var res = '';
             var val;
             traverseDrawingSurface(function (row, col) {
                 //convert to string, 6 colors = 3 bit => 6 bit for 2 fields => fits into 64 characters (a-zA-Z0-9./)
-                val = parseInt(data[row][col]);
+                val = parseInt(modelService.pattern.getColorAt(row,col));
                 if (!val) val = 0;
                 bin |= val << (3 * (i % 2));
                 if (i % 2 == 1) {
@@ -246,33 +255,25 @@ angular.module('kpg.service.persist.url', [])
          *
          * @param data
          * @param traverseDrawingSurface
+         * @param modelService
          * @returns {*}
          */
-        p.decode = function (data) {
-            var result = {};
+        p.decode = function (data,traverseDrawingSurface,modelService) {
+             var i=0;
             traverseDrawingSurface(function (row, col) {
-                var $el = $('#pixel-' + row + '-' + col);
-
                 var bin = decode6BitToChar(data.charAt(Math.floor(i / 2)));
                 if (i % 2 == 1) {
-                    bin = bin >> 3//last three bit
+                    bin = bin >> 3;//last three bit
                 } else {
                     bin = bin & 7;//first three bit
                 }
 
                 i++;
-                //bad hack for old format
-                /*if(oldFormat && (row<=1 || row>=39) && (col==9 || col==6 || col==25 || col==41 || col==57|| col==22 || col==38|| col==54)){
-                 i--;
-                 console.log(row,col);
-                 }*/
-                if (typeof result[row] == 'undefined') {
-                    result[row] = {};
-                }
-                result[row][col] = bin;
+                modelService.pattern.setColorAt(row,col,bin);
+
 
 
             });
-            return rersult;
         };
+        return p;
     });
