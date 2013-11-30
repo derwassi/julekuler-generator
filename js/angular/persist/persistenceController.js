@@ -23,7 +23,7 @@ angular.module('kpg.controller.persist.persist', []).
                 angular.forEach(allProperties, function (codec, k) {
 
                     //  console.log(codec, k);
-                    $location.search(k, codec.encode(patternService.traversePattern, modelService));
+                    $location.search(k, encodeURIComponent(codec.encode(patternService.traversePattern, modelService)));
                 });
                 document.title = modelService.title + ' - Julekuler generator';
             };
@@ -39,7 +39,7 @@ angular.module('kpg.controller.persist.persist', []).
                 angular.forEach(allProperties, function (codec, k) {
                     if (typeof savedState[k] !== 'undefined') {
 
-                        codec.decode(savedState[k], patternService.traversePattern, modelService);
+                        codec.decode(decodeURIComponent(savedState[k]), patternService.traversePattern, modelService);
 
                     }
                 });
@@ -65,6 +65,8 @@ angular.module('kpg.controller.persist.persist', []).
                 saveToUrl();
                 $scope.socialMedia.url = encodeURIComponent(window.location);
                 $scope.socialMedia.title = encodeURIComponent(document.title);
+                $scope.url = 'test';
+                $scope.title = 'noch ein test';
                 if (mode == 'local') {
                     bookmarkService.bookmark();
                     return false;
