@@ -4,3 +4,6 @@
 */*~
 #js/angular/*
 #!js/angular/app/js
+./.idea/*
+node-modules/*
+js/vendor/angular/*

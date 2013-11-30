@@ -19,7 +19,7 @@ angular.module('kpg.controller.canvas.html',[])
          */
         $scope.clickedPattern = function(row,col){
             var color = modelService.currentColor;
-            if(modelService.pattern.getColorAt(row,col) === color){
+            if(modelService.pattern.getColorAt(row,col) == color){
                 color = 0;
             }
             modelService.pattern.setColorAt(row,col,color);

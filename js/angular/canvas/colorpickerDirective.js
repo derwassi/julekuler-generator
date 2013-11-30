@@ -15,7 +15,7 @@ angular.module('kpg.directive.canvas.colorpicker', [])
             if (children.length > 0) {
                 children.remove();
             }
-            console.log(model.colors);
+            //xconsole.log(model.colors);
             var i = 0;
             angular.forEach(colors.getColors(), function (color, index) {
                 if (i++ < 8) {

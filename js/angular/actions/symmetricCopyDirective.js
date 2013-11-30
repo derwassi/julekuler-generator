@@ -4,8 +4,8 @@ angular.module('kpg.directive.actions.symmetricCopy', [])
         var scope;
 
         var createSelector = function(element, symmetricAreas){
-            var $select = angular.element('<select></select>');
-            $select.append(angular.element('<option></option>').attr('value','').html('Copy areas:'));//TODO: multilanguage
+            var $select = angular.element(element);
+            $select.append(angular.element('<option></option>').attr('value','').html(''));//TODO: multilanguage
             for(var i=0;i<symmetricAreas;i++){
                 for( var j=0;j<symmetricAreas;j++){
                     if(i!==j){

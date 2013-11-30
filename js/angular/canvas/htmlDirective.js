@@ -7,7 +7,7 @@ angular.module('kpg.directive.canvas.html', [])
         var createCanvas = function (element, patternService, modelService, config) {
             angular.extend(config, defaults);
             patternService.traversePattern(function (row, col) {
-                var color = '0';
+                var color = ''+modelService.pattern.getColorAt(row,col);
                 var el = angular.element('<div></div>');
                 el.css('width', config.elementWidth + 'px');
                 el.css('height', config.elementWidth + 'px');

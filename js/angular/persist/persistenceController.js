@@ -14,21 +14,18 @@ angular.module('kpg.controller.persist.persist', []).
         'imageService'
         , function ($scope, $location, titleCodecService, patternCodecService, colorCodecService, modelService, bookmarkService, traversePatternFactory,imageService) {
             var patternService = traversePatternFactory({});
-            console.log(titleCodecService);
+            //console.log(titleCodecService);
             var allProperties = {'title': titleCodecService, 'pattern': patternCodecService, 'color': colorCodecService};
-            //TODO: get urls and add replacement
-
-            var socialStuff = {'twitter': '',
-                'gplus': '',
-                'facebook': ''};
+            $scope.socialMedia = {url:'',title:'Julekuler Generator'};
 
             //store data in url
             var saveToUrl = function () {
                 angular.forEach(allProperties, function (codec, k) {
 
-                    console.log(codec, k);
+                    //  console.log(codec, k);
                     $location.search(k, codec.encode(patternService.traversePattern, modelService));
                 });
+                document.title = modelService.title + ' - Julekuler generator';
             };
 
 
@@ -66,13 +63,11 @@ angular.module('kpg.controller.persist.persist', []).
              */
             $scope.bookmark = function (mode) {
                 saveToUrl();
+                $scope.socialMedia.url = encodeURIComponent(window.location);
+                $scope.socialMedia.title = encodeURIComponent(document.title);
                 if (mode == 'local') {
                     bookmarkService.bookmark();
-                } else {
-                    if (typeof socialStuff[mode] !== 'undefined') {
-                        var url = socialStuff[mode];
-                        //TODO: Open stuff in new window
-                    }
+                    return false;
                 }
             };
 

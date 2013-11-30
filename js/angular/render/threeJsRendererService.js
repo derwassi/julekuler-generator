@@ -74,10 +74,10 @@ angular.module('kpg.directive.render.threeJs', [])
         var spriteContext = spriteCanvas.getContext("2d");
         var imgObj = new Image();
 
-        var createThreeJs = function (config,redrawFunc) {
+        var createThreeJs = function (config,redrawFunc,element) {
 
             config = angular.extend(config || {}, defaults);
-            console.log('defaults', defaults);
+            //console.log('defaults', defaults);
 
 
             glCanvas.width = config.frame.width;
@@ -91,7 +91,7 @@ angular.module('kpg.directive.render.threeJs', [])
             spriteCanvas.width = config.textureField.source.width;
             spriteCanvas.height = config.textureField.source.height;
 
-            //element.append(drawingCanvas);element.append(textureCanvas);element.append(colorCanvas);
+           // element.append(drawingCanvas);element.append(textureCanvas);element.append(colorCanvas);
             //initialize ThreeD renderer
             var renderer;
             var geometry = config.webgl;
@@ -231,7 +231,8 @@ angular.module('kpg.directive.render.threeJs', [])
                     var toy = i * 2 * a;
                     var towidth = 16 * a;
                     var toheight = 2 * a;
-                    console.log(fromx, fromy, fromwidth, fromheight, tox, toy, towidth, toheight);
+
+                    //console.log(fromx, fromy, fromwidth, fromheight, tox, toy, towidth, toheight);
                     textureContext.drawImage(drawingCanvas, fromx, fromy, fromwidth, fromheight, tox, toy, towidth, toheight);
                     textureContext.drawImage(drawingCanvas, fromx, 41 * a - fromy - 2 * a, fromwidth, fromheight, tox, 41 * a - toy - 2 * a, towidth, toheight);
                 }
@@ -250,14 +251,14 @@ angular.module('kpg.directive.render.threeJs', [])
                 //TODO fetch settings from attributes
                 scope = $scope;
                 var r = function(){
-                    console.log("redraw");
+                    //console.log("redraw");
                     redraw({},$scope.modelService,$scope.patternService);
                     return false;
                 };
 
                 var renderer = createThreeJs({},r,element);
-                console.log(renderer.domElement);
-                console.log(element);
+                //console.log(renderer.domElement);
+                //console.log(element);
                 angular.element(element).append(renderer.domElement);
                 scope.redraw = r;
             }

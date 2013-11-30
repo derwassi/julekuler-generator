@@ -89,7 +89,7 @@ angular.module('kpg.service.persist.url', [])
 
                 modelService.colors.setColor(''+_tmp[0], _tmp[1]);
             }
-            console.log(modelService.colors.getColors());
+            //console.log(modelService.colors.getColors());
         };
         return p;
 
